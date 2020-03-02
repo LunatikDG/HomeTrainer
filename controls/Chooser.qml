@@ -1,0 +1,186 @@
+// Copyright (c) 2020, Tochka nevozvrata
+// Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted,
+// provided that the above copyright notice and this permission notice appear in all copies.
+// THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS.
+// IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+// WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+import controls.Utils;
+import controls.HighlightListView;
+import "ChooserDelegate.qml";
+
+Item {
+	id: chooserItem;
+
+	height: chooserBackground.height;
+	width: Math.min(chooserWidth, listView.contentWidth + 30 + (20 + rightImage.width + leftImage.width) * (showArrows && arrowsInPanel));
+	focusedChild: listView;
+
+//------------properties-----------------------------------
+
+    property alias currentIndex: listView.currentIndex;
+	property alias count: listView.count;
+	property alias contentWidth: listView.contentWidth;
+	property alias model: listView.model;
+	property bool keyNavigationWraps;
+	property int chooserWidth: 520;
+	
+	property bool showArrows: true;
+	property bool arrowsInPanel: true;
+
+    property Color backColor: activeFocus ? colorTheme.activeFocusColor : colorTheme.focusablePanelColor;
+    property bool backgroundVisible: true;
+	property Color textColor: colorTheme.textColor;
+	property Color focusTextColor: colorTheme.focusedTextColor;
+	property Color highlightColor: activeFocus ? colorTheme.highlightPanelColor : colorTheme.passiveHighlightPanel;
+
+//------------structure------------------------------------
+	
+	ActivePanel {
+		id: chooserBackground;
+		color: parent.backColor;
+		focus: false;
+		anchors.fill: parent;
+        visible: parent.backgroundVisible;
+	}	
+	Image {
+		id: leftImage;
+		anchors.verticalCenter: listView.verticalCenter;
+		anchors.right: listView.left;
+		anchors.rightMargin: 10;
+		forcedLoading: true;
+		source: colorTheme.pathToStyleFolder + "/left.png";
+		//opacity: parent.activeFocus ? 1 : 0;
+		visible : chooserItem.showArrows;
+		
+		Behavior on opacity { animation: Animation { duration: 300; } }
+	}	
+    Item {
+		anchors.top: listView.top;
+		anchors.left: listView.left;
+		anchors.bottom: listView.bottom;
+		opacity: (listView.contentWidth > listView.width) && (listView.currentIndex != 0) ? 1 : 0;
+		width: 64;
+
+		Gradient {
+			anchors.left: parent.left;
+			anchors.top: parent.top;
+			anchors.right: parent.right;
+			anchors.bottom: parent.bottom;
+
+			orientation: Horizontal;
+			GradientStop {
+				position: 0;
+				color: chooserItem.activeFocus ? colorTheme.activeFocusColor : colorTheme.focusablePanelColor;
+				Behavior on color { animation: Animation { duration: 300;} }
+			}
+			GradientStop {
+				position: 1;
+				color: Utils.setAlpha((chooserItem.activeFocus ? colorTheme.activeFocusColor : colorTheme.focusablePanelColor), 0);
+				Behavior on color { animation: Animation { duration: 300;} }
+			}
+		}
+		Behavior on opacity { animation: Animation { duration: 300;} }
+	}
+	HighlightListView {
+		id: listView;
+		clip: true;
+
+		anchors.right: parent.right;
+		anchors.left: parent.left;
+		anchors.rightMargin: 10 + (rightImage.width + 10) * (parent.showArrows && parent.arrowsInPanel);
+		anchors.leftMargin: 10 + (leftImage.width + 10) * (parent.showArrows && parent.arrowsInPanel);
+		anchors.verticalCenter: parent.verticalCenter;
+		
+		height: parent.height;
+		leftFocusMargin: 5;
+        rightFocusMargin: 5;
+        highlightFollowsCurrentItem: false;
+        keyNavigationWraps: parent.keyNavigationWraps;
+		handleNavigationKeys: false;
+		orientation: Horizontal;
+		highlightColor: parent.highlightColor;
+		positionMode: Center;
+
+		delegate: ChooserDelegate {
+			textColor: focused ? parent.parent.focusTextColor : parent.parent.textColor;
+		}
+				
+		Image {
+			anchors.right: highlight.left;
+			anchors.top: highlight.top;
+			anchors.bottom: highlight.bottom;
+			source: "res/common/shadow_left.png";
+			fillMode: TileVertically;
+		}
+		Image {
+			anchors.left: highlight.right;
+			anchors.top: highlight.top;
+			anchors.bottom: highlight.bottom;
+			source: "res/common/shadow_right.png";
+			fillMode: TileVertically;
+		}
+		
+		onKeyPressed: {
+			if(key == "Left")
+				if (!chooserItem.keyNavigationWraps && this.currentIndex == 0)
+					return false
+				else
+				{
+					this.decrementCurrentIndex();
+					return true;
+				}
+			
+			if (key == "Right")
+				if (!chooserItem.keyNavigationWraps && this.currentIndex == this.count - 1)
+					return false
+				else
+				{
+					this.incrementCurrentIndex();
+					return true;
+				}
+		}
+
+		//onLeftPressed:	{ this.decrementCurrentIndex(); }
+		//onRightPressed:	{ this.incrementCurrentIndex(); }
+	}		
+	Item {
+		anchors.top: listView.top;
+		anchors.right: listView.right;
+		anchors.bottom: listView.bottom;
+		opacity: (listView.contentWidth > listView.width) && (listView.currentIndex != (listView.count - 1)) ? 1 : 0;
+		width: 64;
+
+		Gradient {
+			anchors.left: parent.left;
+			anchors.top: parent.top;
+			anchors.right: parent.right;
+			anchors.bottom: parent.bottom;
+
+			orientation: Horizontal;
+			GradientStop {
+				position: 0;
+				color: Utils.setAlpha((chooserItem.activeFocus ? colorTheme.activeFocusColor : colorTheme.focusablePanelColor), 0);
+				Behavior on color { animation: Animation { duration: 300;} }
+			}
+			GradientStop {
+				position: 1;
+				color: chooserItem.activeFocus ? colorTheme.activeFocusColor : colorTheme.focusablePanelColor;
+				Behavior on color { animation: Animation { duration: 300;} }
+			}
+		}
+		Behavior on opacity { animation: Animation { duration: 300;} }
+	}
+    Image {
+		id: rightImage;
+		anchors.verticalCenter: listView.verticalCenter;
+		anchors.left: listView.right;
+		anchors.leftMargin: 10;
+		forcedLoading: true;
+		source: colorTheme.pathToStyleFolder + "/right.png";
+		//opacity: parent.activeFocus ? 1 : 0;
+		visible: chooserItem.showArrows;
+
+		Behavior on opacity { animation: Animation { duration: 300; } }
+	}	
+}
