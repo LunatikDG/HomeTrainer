@@ -8,28 +8,48 @@
 import "Sidebar.qml";
 import "Profile.qml";
 import "Training.qml";
+import "About.qml";
 import "Statistic.qml";
 
 import "Exercise.qml";
 
-import "controls/Button.qml";
-import "controls/Edit.qml";
-import "controls/Chooser.qml";
+import "Authorization.qml";
 
-import "js/utils.js" as utils;
+import "controls/Edit.qml";
+import "controls/Button.qml";
+import "controls/Chooser.qml";
+import "controls/ProgressBar.qml";
+
+import "js/engine.js" as engine;
 
 Application {
 	id: hometrainer;
 
-	color: utils.colors.background;
+	color: engine.colors.background;
+
+	Resource {
+		url: engine.resourcesPath + "data.json";
+		onDataChanged: {
+			engine.loadData(JSON.parse(this.data));
+		}
+	}
 
 	Sidebar { 
 		id: sidebar;
 		anchors.left: mainWindow.left;
 		anchors.top: mainWindow.top;
 		anchors.bottom: mainWindow.bottom;
-		width: utils.menuWidth;
-		color: utils.colors.backgroundSidebar;
+		width: engine.menuWidth;
+		color: engine.colors.backgroundSidebar;
+
+		onMenuSelected: {
+			if(target == "exit") {
+				authorization.visible = true;
+				authorization.setFocus();
+			}
+			else
+				engine.showByTag(container.children, target, true);
+		}
 	}
 	
 	Rectangle {
@@ -39,7 +59,7 @@ Application {
 		anchors.top: mainWindow.top;
 		anchors.right: mainWindow.right;
 		anchors.bottom: mainWindow.bottom;
-		anchors.margins: 2*utils.margin;
+		anchors.margins: engine.margin;
 
 		color: parent.color;
 
@@ -48,18 +68,66 @@ Application {
 			anchors.fill: parent;			
 			color: parent.color;
 			property var tag: "profile";
+
+			onUserDataSaved: {
+				sidebar.update();
+			}
+			onClosed: {
+				sidebar.setFocus();
+			}
 		}
 		Training { 
 			id: training;
 			anchors.fill: parent;
 			color: parent.color;
 			property var tag: "training";
-		}
+			
+			property int exerciseIndex;
+
+			onClosed: {
+				sidebar.setFocus();
+			}
+			onExerciseStarted: {
+				exercise.showButtonNext = false;				
+				exercise.setExercise(index);
+				engine.showByTag(container.children, "exercise", true);
+			}
+			onTrainingStarted: {	
+				exercise.showButtonNext = true;	
+				this.exerciseIndex = 0;
+				this.nextExercise();
+				engine.showByTag(container.children, "exercise", true);
+			}
+			function nextExercise() {
+				if(this.exerciseIndex >= engine.exerciseItems.length) {
+					engine.addTraining();
+					engine.showByTag(container.children, "training", true);
+					return;
+				}
+				if(this.exerciseIndex == engine.exerciseItems.length - 1) {
+					exercise.showButtonFinish = true;
+				}
+				exercise.setExercise(this.exerciseIndex++);
+			}
+		}		
 		Statistic { 
 			id: statistic;
 			anchors.fill: parent;
 			color: parent.color;
 			property var tag: "statistic";
+			onClosed: {
+				sidebar.setFocus();
+			}
+		}
+		About { 
+			id: about;
+			anchors.fill: parent;			
+			color: parent.color;
+			property var tag: "about";
+
+			onClosed: {
+				sidebar.setFocus();
+			}
 		}
 
 		Exercise { 
@@ -67,29 +135,70 @@ Application {
 			anchors.fill: parent;
 			color: parent.color;
 			property var tag: "exercise";
-		}
 
-		function showChild(index, withFocus) {	
-			for(var i = 0; i < this.children.length; i++) {
-				this.children[i].visible = (i == index);
+			onClosed: {
+				engine.showByTag(container.children, "training", true);
 			}
-			if(withFocus)
-				this.children[index].setFocus();
-		}
-		function showChildByTag(tag, withFocus) {
-			for(var i = 0; i < this.children.length; i++) {
-				if(this.children[i].tag != tag)
-					this.children[i].visible = false;
-				else {
-					this.children[i].visible = true;
-					if(withFocus)
-						this.children[i].setFocus();
-				}				
+			onNext: {
+				engine.addExercise();
+				training.nextExercise();
+			}
+			onDone: {
+				engine.addExercise();
+				engine.showByTag(container.children, "training", true);
 			}
 		}
 		
 		onCompleted: {
-			this.showChildByTag("profile", false);
+			engine.showByTag(container.children, "profile", false);
 		}
-	}	
+	}
+
+	Authorization {
+		id: authorization;
+
+		anchors.fill: mainWindow;
+
+		color: parent.color;
+
+		onClosed: {
+			viewsFinder.closeApp();
+		}
+		onNewSelected: {
+			engine.newUser();
+			engine.newResults("");
+
+			sidebar.update();
+			profile.update();
+	
+			engine.showByTag(container.children, "profile", true);
+			this.visible = false;
+		}
+		onUserSelected: {
+			engine.loadUser(name);
+			engine.loadResults(name);
+
+			sidebar.update();
+			profile.update();
+	
+			engine.showByTag(container.children, "profile", false);
+			sidebar.setFocus();
+			this.visible = false;
+		}
+	}
+	onCompleted: {
+		
+		var musers = [];
+		musers.push({ name: "123456789012345", birthday: 2000, gender: 0, level: 0 });
+		musers.push({ name: "Второй", birthday: 1990, gender: 0, level: 1 });
+		musers.push({ name: "Третий", birthday: 1980, gender: 0, level: 2 });
+
+		//save("users", musers);		
+	}
+	onActiveFocusChanged: {
+		if(this.activeFocus) {
+			authorization.visible = true;
+			authorization.setFocus();
+		}
+	}
 }

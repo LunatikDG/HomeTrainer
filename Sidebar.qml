@@ -8,56 +8,46 @@
 import "Menu.qml";
 
 Rectangle {
+
+	signal menuSelected(target);
+
 	Image {
 		id: logo;
 
 		anchors.top: parent.top;
 		anchors.left: parent.left;
-		anchors.margins: utils.margin;
+		anchors.margins: engine.marginHalf;
 
-		source: utils.resourcesPath + "logo.png";
+		source: engine.resourcesPath + "logo.png";
 		fillMode: PreserveAspectFit;
     }
-
 	Rectangle {
 		id: hline;
 
 		anchors.top: logo.bottom;
 		anchors.left: parent.left;
 		anchors.right: parent.right;
-		anchors.margins: utils.margin;
+		anchors.margins: engine.marginHalf;
 
 		height: 2;
-		color: utils.colors.focusText;
+		color: engine.colors.focusText;
 	}
 
 	Item {
 		id: name;
 
 		anchors.top: hline.bottom;
-		anchors.margins: utils.margin;
-		anchors.topMargin: 2*utils.margin;
+		anchors.margins: engine.marginHalf;
+		anchors.topMargin: engine.margin;
 
 		width: parent.width;
 		
 		BodyText {
 			id: nameText;
 			anchors.centerIn: parent;
-			text: "";
-			color: utils.colors.userName;
-
-			onCompleted: {
-				var user;
-				if(user = load("user")) {
-					this.text = user.name;
-				}					
-			}
-
-			function update(value) {
-				this.text = value;
-			}
+			color: engine.colors.userName;
 		}
-	}	
+	}
 
 	Menu {
 		id: menu;
@@ -65,7 +55,14 @@ Rectangle {
 		anchors.left: parent.left;
         anchors.right: parent.right;
         anchors.bottom: parent.bottom;
-		anchors.margins: utils.margin;
-		anchors.topMargin: 2*utils.margin;
+		anchors.margins: engine.marginHalf;
+		anchors.topMargin: engine.margin;
+
+		onSelectPressed: {
+			parent.menuSelected(this.model.get(this.currentIndex).target);
+		}
+	}
+	function update() {		
+		engine.updateSidebar(nameText, menu);
 	}
 }

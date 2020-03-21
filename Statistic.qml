@@ -6,9 +6,12 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Rectangle {
+	
+	signal closed;
+
     TitleText {
 		id: header;
-		color: utils.colors.headerText;
+		color: engine.colors.headerText;
 		text: tr("Статистика");
 	}
 	Button {
@@ -19,13 +22,13 @@ Rectangle {
 
 		text: "X";
 		borderWidth: 2;
-		color: activeFocus ? utils.colors.focusBackground : utils.colors.background;
-		textColor: activeFocus ? utils.colors.focusText : utils.colors.textColor;
+		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
 		borderColor: textColor;
 		radius: 10;
 
 		onSelectPressed: {
-			menu.setFocus();
+			parent.closed();
 		}
 		onKeyPressed: {		
 			if (key == "Up" || key == "Down") {
@@ -38,44 +41,44 @@ Rectangle {
 	BodyText {
 		id: textName;
 		anchors.top: header.bottom;
-		anchors.topMargin: 2*utils.margin;
-		color: utils.colors.textColor;
+		anchors.topMargin: engine.margin;
+		color: engine.colors.textColor;
 	}
 	BodyText {
 		id: textAge;
 		anchors.top: textName.bottom;
-		anchors.topMargin: 2*utils.margin;
-		color: utils.colors.textColor;
+		anchors.topMargin: engine.margin;
+		color: engine.colors.textColor;
 	}
 	BodyText {
 		id: textDays;
 		anchors.top: textAge.bottom;
-		anchors.topMargin: 2*utils.margin;
-		color: utils.colors.textColor;
+		anchors.topMargin: engine.margin;
+		color: engine.colors.textColor;
 	}
 	BodyText {
 		id: textTrainings;
 		anchors.top: textDays.bottom;
-		anchors.topMargin: 2*utils.margin;
-		color: utils.colors.textColor;
+		anchors.topMargin: engine.margin;
+		color: engine.colors.textColor;
 	}
 	BodyText {
 		id: textExercises;
 		anchors.top: textTrainings.bottom;
-		anchors.topMargin: 2*utils.margin;
-		color: utils.colors.textColor;
+		anchors.topMargin: engine.margin;
+		color: engine.colors.textColor;
 	}
 	BodyText {
 		id: textExercisesByDay;
 		anchors.top: textExercises.bottom;
-		anchors.topMargin: 2*utils.margin;
-		color: utils.colors.textColor;
+		anchors.topMargin: engine.margin;
+		color: engine.colors.textColor;
 	}
 	BodyText {
 		id: textLastDate;
 		anchors.top: textExercisesByDay.bottom;
-		anchors.topMargin: 2*utils.margin;
-		color: utils.colors.textColor;
+		anchors.topMargin: engine.margin;
+		color: engine.colors.textColor;
 	}
 
 	Button {
@@ -85,15 +88,15 @@ Rectangle {
 		anchors.horizontalCenter: parent.horizontalCenter;
 
 		text: tr("Сбросить");
-		color: activeFocus ? utils.colors.focusBackground : utils.colors.background;
-		textColor: activeFocus ? utils.colors.focusText : utils.colors.textColor;
+		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
 		borderColor: textColor;
 		borderWidth: 2;
 
 		onSelectPressed: {
-			save("results", { days: 0, trainings: 0, exercises: 0, lastDate: "01.01.1900" });
+			engine.resetResults();
 			parent.loadResults();
-			menu.setFocus();
+			parent.closed();
 		}
 		onKeyPressed: {		
 			if (key == "Up" || key == "Down") {
@@ -107,43 +110,18 @@ Rectangle {
 		if(this.activeFocus) {
 			buttonClose.setFocus();
 
-			textName.text = tr("Имя: ");
-			textAge.text = tr("Возраст: ");
+			textName.text = tr("Имя: ") + engine.user.name;
+			textAge.text = tr("Возраст: ~") + engine.getAge();
 			
-			var data;
-			if(data = load("user")) {
-				textName.text += data.name;
-				textAge.text += "~" + utils.calculateAge(data.birthday);
-			}
 			this.loadResults();
 		}
 	}
-	onCompleted: {		
-	}
 
-	function loadResults() {
-		
-		textDays.text = tr("Количество дней: ");
-		textTrainings.text = tr("Завершено тренировок: ");
-		textExercises.text = tr("Выполнено упражнений: ");
-		textExercisesByDay.text = tr("Среднее количество упражений в день: ");
-		textLastDate.text = tr("Последняя тренировка: ");
-
-		var data;
-
-		if(data = load("results")) {
-			textDays.text += data.days;
-			textTrainings.text += data.trainings;
-			textExercises.text += data.exercises;
-			textExercisesByDay.text += Math.floor(data.exercises / (data.days == 0 ? 1 : data.days));
-			textLastDate.text += data.lastDate;
-		}
-		else {
-			textDays.text += 0;
-			textTrainings.text += 0;
-			textExercises.text += 0;
-			textExercisesByDay.text += 0;
-			textLastDate.text += "01.01.1900";
-		}
+	function loadResults() {		
+		textDays.text = tr("Количество дней: ") + engine.results.days;
+		textTrainings.text = tr("Завершено тренировок: ") + engine.results.trainings;
+		textExercises.text = tr("Выполнено упражнений: ") + engine.results.exercises;
+		textExercisesByDay.text = tr("Среднее количество упражений в день: ") + Math.floor(engine.results.exercises / (engine.results.days == 0 ? 1 : engine.results.days));
+		textLastDate.text = tr("Последняя тренировка: ") + engine.results.lastDate;
 	}
 }

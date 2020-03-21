@@ -12,27 +12,17 @@ ListView {
 	model: ListModel { }
 
 	delegate: Button { 
-		text: tr(model.title);
-		width: parent.width;
-		textColor: engine.colors.focusText;
-		color: engine.colors.backgroundSidebar;
-		borderWidth: 2;
-		borderColor: activeFocus ? engine.colors.focusText : engine.colors.backgroundSidebar;
+		text: tr(model.name);
+		width: engine.userButtonWidth;
+		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
+		borderColor: textColor;
+		borderWidth: 1;
+		anchors.horizontalCenter: parent.horizontalCenter;
 	}
 
 	onActiveFocusChanged: {
 		if(this.activeFocus) 
 			this.currentIndex = 0;
 	}
-	onKeyPressed: {		
-		if (key == "Up" && this.currentIndex == 0) {
-			this.currentIndex = this.model.count - 1;
-			return true;
-		}	
-		if (key == "Down" && this.currentIndex == this.model.count - 1) {
-			this.currentIndex = 0;
-			return true;
-		}				
-	}
 }
-

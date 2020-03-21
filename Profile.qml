@@ -6,10 +6,14 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Rectangle {
+
+	signal userDataSaved(name);
+	signal closed;
+
     TitleText {
 		id: header;
-		color: utils.colors.headerText;
-		text: tr("Анкета");
+		color: engine.colors.headerText;
+		text: tr("Профиль");
 	}
 	Button {
 		id: buttonClose;
@@ -19,14 +23,14 @@ Rectangle {
 
 		text: "X";
 		borderWidth: 2;
-		color: activeFocus ? utils.colors.focusBackground : utils.colors.background;
-		textColor: activeFocus ? utils.colors.focusText : utils.colors.textColor;
+		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
 		borderColor: textColor;
 		radius: 10;
 
 		onSelectPressed: {
-			profile.loadUser();
-			menu.setFocus();
+			parent.update();
+			parent.closed();
 		}
 		onKeyPressed: {		
 			if (key == "Up") {
@@ -42,7 +46,7 @@ Rectangle {
 
 	Item {
 		anchors.top: header.bottom;
-		anchors.topMargin: 2*utils.margin;
+		anchors.topMargin: engine.margin;
 
 		width: 550;
 
@@ -52,7 +56,7 @@ Rectangle {
 			anchors.verticalCenter: name.verticalCenter;
 
 			text: tr("Имя:");
-			color: utils.colors.textColor;
+			color: engine.colors.textColor;
 		}
 		
 		Edit {
@@ -63,14 +67,13 @@ Rectangle {
 			width: 350;
 
 			maxLen: 15;
-			textColor: utils.colors.focusText;
-			cursorColor: utils.colors.focusText;
-			backColor: activeFocus ? utils.colors.focusBackground : utils.colors.textColor;
-			placeholderColor: utils.colors.placeholder;
-			borderColor: utils.colors.focusText;
+			
+			textColor: engine.colors.focusText;
+			cursorColor: engine.colors.focusText;
+			backColor: activeFocus ? engine.colors.focusBackground : engine.colors.textColor;
+			borderColor: engine.colors.focusText;
 			borderRadius: 0;
-		
-			placeholder: tr("Введите имя");
+
 			onKeyPressed: {
 				if (key == "Up") {
 					buttonClose.setFocus();
@@ -80,13 +83,12 @@ Rectangle {
 					birthday.setFocus();
 					return true;
 				}		
-			}
-			
+			}			
 		}
 	}	
 	Item {
 		anchors.top: name.bottom;
-		anchors.topMargin: 2*utils.margin;
+		anchors.topMargin: engine.margin;
 
 		width: 550;
 
@@ -96,7 +98,7 @@ Rectangle {
 			anchors.verticalCenter: birthday.verticalCenter;
 
 			text: tr("Год рождения:");
-			color: utils.colors.textColor;
+			color: engine.colors.textColor;
 		}
 
 		Edit {
@@ -107,15 +109,12 @@ Rectangle {
 			width: 350;
 
 			maxLen: 4;
-			validateChars: utils.editCharsNum;
-			textColor: utils.colors.focusText;
-			cursorColor: utils.colors.focusText;
-			backColor: activeFocus ? utils.colors.focusBackground : utils.colors.textColor;
-			placeholderColor: utils.colors.placeholder;
-			borderColor: utils.colors.focusText;
+			validateChars: engine.editCharsNum;
+			textColor: engine.colors.focusText;
+			cursorColor: engine.colors.focusText;
+			backColor: activeFocus ? engine.colors.focusBackground : engine.colors.textColor;
+			borderColor: engine.colors.focusText;
 			borderRadius: 0;
-		
-			placeholder: tr("Введите год рождения");
 
 			onKeyPressed: {
 				if (key == "Up") {
@@ -136,7 +135,7 @@ Rectangle {
 
 		anchors.top: birthday.bottom;
 		anchors.left: parent.left;        
-		anchors.topMargin: 2*utils.margin;
+		anchors.topMargin: engine.margin;
 
 		BodyText {
 			id: textGender;
@@ -144,7 +143,7 @@ Rectangle {
 			anchors.verticalCenter: parent.verticalCenter;
 
 			text: tr("Пол:");
-			color: utils.colors.textColor;
+			color: engine.colors.textColor;
 		}
 		Chooser {
 			id: genderChooser;
@@ -152,12 +151,12 @@ Rectangle {
 			anchors.right: parent.right;   
 			
 			backgroundVisible: false;
-			textColor: utils.colors.textColor;
-			focusTextColor: utils.colors.focusText;
-			highlightColor: activeFocus ? utils.colors.focusBackground : utils.colors.textColor;
+			textColor: engine.colors.textColor;
+			focusTextColor: engine.colors.focusText;
+			highlightColor: activeFocus ? engine.colors.focusBackground : engine.colors.textColor;
 
 			model: ListModel { }
-			
+
 			onKeyPressed: {		
 				if (key == "Up") {
 					birthday.setFocus();
@@ -169,10 +168,7 @@ Rectangle {
 				}			
 			}
 			onCompleted: {
-				utils.genderItems.forEach(function (item) {
-					model.append( { text: tr(item.title)} );
-				});
-				
+				engine.loadGenderList(this);
 			}
 		}
 	}
@@ -182,7 +178,7 @@ Rectangle {
 
 		anchors.top: genderChooser.bottom;
 		anchors.left: parent.left;        
-		anchors.topMargin: 2*utils.margin;
+		anchors.topMargin: engine.margin;
 
 		BodyText {
 			id: textLevel;
@@ -190,7 +186,7 @@ Rectangle {
 			anchors.verticalCenter: parent.verticalCenter;
 
 			text: tr("Уровень:");
-			color: utils.colors.textColor;
+			color: engine.colors.textColor;
 		}
 		Chooser {
 			id: levelChooser;     
@@ -198,11 +194,12 @@ Rectangle {
 			anchors.right: parent.right;
 			
 			backgroundVisible: false;
-			textColor: utils.colors.textColor;
-			focusTextColor: utils.colors.focusText;
-			highlightColor: activeFocus ? utils.colors.focusBackground : utils.colors.textColor;
+			textColor: engine.colors.textColor;
+			focusTextColor: engine.colors.focusText;
+			highlightColor: activeFocus ? engine.colors.focusBackground : engine.colors.textColor;
 
 			model: ListModel { }
+
 			
 			onKeyPressed: {		
 				if (key == "Up") {
@@ -215,9 +212,7 @@ Rectangle {
 				}				
 			}
 			onCompleted: {
-				utils.levelItems.forEach(function (item) {
-					model.append( { text: tr(item.title)} );
-				});
+				engine.loadLevelList(this);
 			}
 		}
 	}
@@ -229,30 +224,42 @@ Rectangle {
 		anchors.horizontalCenter: parent.horizontalCenter;
 
 		text: tr("Сохранить");
-		color: activeFocus ? utils.colors.focusBackground : utils.colors.background;
-		textColor: activeFocus ? utils.colors.focusText : utils.colors.textColor;
+		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
 		borderColor: textColor;
 		borderWidth: 2;
 
 		onSelectPressed: {
-			if(name.text == "") {
-				name.placeholderColor = utils.colors.error;
-				name.placeholder = tr("Не введено имя!");
-				name.setFocus();
-				return;
+			var result = engine.saveUser(name.text, birthday.text, genderChooser.currentIndex, levelChooser.currentIndex);
+			switch (result) {
+				case "emptyName":
+					name.placeholderColor = engine.colors.error;
+					name.placeholder = tr("Не введено имя!");
+					name.setFocus();	
+					break;
+				case "profileBusy":
+					name.placeholderColor = engine.colors.error;
+					name.placeholder = tr("Профиль занят!");
+					name.text = "";
+					name.setFocus();	
+					break;
+				case "emptyBirthday":
+					birthday.placeholderColor = engine.colors.error;
+					birthday.placeholder = tr("Не введен год рождения!");
+					birthday.text = "";
+					birthday.setFocus();
+					break;
+				case "invalidBirthday":
+					birthday.placeholderColor = engine.colors.error;
+					birthday.placeholder = tr("Неверно введен год рождения!");
+					birthday.text = "";
+					birthday.setFocus();
+					break;
+				case "success":
+					parent.userDataSaved(name.text);
+					parent.closed();
+					break;
 			}
-			if((birthday.text.length < 4) || (birthday.text < 1900) || (birthday.text > utils.currentDate.getFullYear())) {
-				birthday.placeholderColor = utils.colors.error;
-				birthday.placeholder = tr("Неверно введен год рождения!");
-				birthday.text = "";
-				birthday.setFocus();
-				return;
-			}
-			save("user", { name: name.text, birthday: birthday.text, gender: genderChooser.currentIndex, level: levelChooser.currentIndex });
-				
-			nameText.update(name.text);
-			menu.appendAll();
-			menu.setFocus();
 		}
 		onKeyPressed: {		
 			if (key == "Up") {
@@ -268,26 +275,19 @@ Rectangle {
 
 	onActiveFocusChanged: {
 		if(this.activeFocus) {
+			name.placeholder = tr("Введите имя");
+			name.placeholderColor = engine.colors.placeholder;
+			birthday.placeholder = tr("Введите год рождения");
+			birthday.placeholderColor = engine.colors.placeholder;
+
 			buttonClose.setFocus();
 		}
 	}
-	onCompleted: {
-		this.loadUser();
-	}
 
-	function loadUser() {
-		var user;
-		if(user = load("user")) {
-			name.text = user.name;
-			birthday.text = user.birthday;
-			genderChooser.currentIndex = user.gender;
-			levelChooser.currentIndex = user.level;
-		}
-		else {
-			name.text = "";
-			birthday.text = "";
-			genderChooser.currentIndex = 0;
-			levelChooser.currentIndex = 0;
-		}
+	function update() {
+		this.name.text = engine.user.name;
+		this.birthday.text = engine.user.birthday;
+		this.genderChooser.currentIndex = engine.user.gender;
+		this.levelChooser.currentIndex = engine.user.level;	
 	}
 }

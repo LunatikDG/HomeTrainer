@@ -7,11 +7,13 @@
 
 Rectangle {
 
-	property int exerciseIndex;
+	signal exerciseStarted(index);
+	signal trainingStarted;
+	signal closed;
 
     TitleText {
 		id: header;
-		color: utils.colors.headerText;
+		color: engine.colors.headerText;
 		text: tr("Тренировка");
 	}
 	Button {
@@ -21,14 +23,14 @@ Rectangle {
 		width: height;
 
 		text: "X";
-		color: activeFocus ? utils.colors.focusBackground : utils.colors.background;
-		textColor: activeFocus ? utils.colors.focusText : utils.colors.textColor;
+		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
 		borderColor: textColor;
 		borderWidth: 2;
 		radius: 10;
 
 		onSelectPressed: {
-			menu.setFocus();
+			parent.closed();
 		}
 		onKeyPressed: {		
 			if (key == "Up") {
@@ -46,29 +48,26 @@ Rectangle {
 		id: textTraining;
 
 		anchors.top: header.bottom;
-		anchors.topMargin: 2*utils.margin;
+		anchors.topMargin: engine.margin;
 
 		text: tr("Для начала тенировки нажмите \"Старт\"");
-		color: utils.colors.textColor;
+		color: engine.colors.textColor;
 	}
 	Button {
 		id: buttonStart; 
 
 		anchors.top: textTraining.bottom;
 		anchors.horizontalCenter: parent.horizontalCenter;
-		anchors.topMargin: 2*utils.margin;
+		anchors.topMargin: engine.margin;
 
 		text: tr("Старт");
-		color: activeFocus ? utils.colors.focusBackground : utils.colors.background;
-		textColor: activeFocus ? utils.colors.focusText : utils.colors.textColor;
+		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
 		borderColor: textColor;
 		borderWidth: 2;
 
 		onSelectPressed: {
-			parent.exerciseIndex = 0;
-			exercise.showButtonNext = true;
-			parent.nextExercise();
-			container.showChildByTag("exercise", true);
+			parent.trainingStarted();
 		}
 
 		onKeyPressed: {		
@@ -88,10 +87,10 @@ Rectangle {
 						
 		anchors.top: buttonStart.bottom;
 		anchors.left: parent.left; 
-		anchors.topMargin: 2*utils.margin;
+		anchors.topMargin: engine.margin;
 
-		text: tr("Выбрать упражнение");
-		color: utils.colors.textColor;
+		text: tr("Выбрать одно упражнение");
+		color: engine.colors.textColor;
 	}
 	Chooser {
 		id: exerciseChooser;     
@@ -99,12 +98,12 @@ Rectangle {
 		anchors.top: textExercise.bottom;
 		anchors.left: parent.left;        
 		anchors.right: parent.right;  
-		anchors.topMargin: 2*utils.margin;
+		anchors.topMargin: engine.margin;
 			
 		backgroundVisible: false;
-		textColor: utils.colors.textColor;
-		focusTextColor: utils.colors.focusText;
-		highlightColor: activeFocus ? utils.colors.focusBackground : utils.colors.textColor;
+		textColor: engine.colors.textColor;
+		focusTextColor: engine.colors.focusText;
+		highlightColor: activeFocus ? engine.colors.focusBackground : engine.colors.textColor;
 
 		model: ListModel { }
 
@@ -120,9 +119,7 @@ Rectangle {
 		}
 		
 		onCompleted: {		
-			utils.exerciseItems.forEach(function (item) {
-				model.append( { text: tr(item.title)} );
-			});	
+			engine.loadExerciseList(this);
 		}
 	}
 	Button {
@@ -130,18 +127,16 @@ Rectangle {
 
 		anchors.top: exerciseChooser.bottom;
 		anchors.right: parent.right;  
-		anchors.topMargin: 2*utils.margin;
+		anchors.topMargin: engine.margin;
 
 		text: tr("Выполнить");
-		color: activeFocus ? utils.colors.focusBackground : utils.colors.background;
-		textColor: activeFocus ? utils.colors.focusText : utils.colors.textColor;
+		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
 		borderColor: textColor;
 		borderWidth: 2;
 
 		onSelectPressed: {
-			exercise.showButtonNext = false;
-			exercise.setExerciseData(utils.exerciseItems[exerciseChooser.currentIndex]);
-			container.showChildByTag("exercise", true);
+			parent.exerciseStarted(exerciseChooser.currentIndex);
 		}
 
 		onKeyPressed: {		
@@ -159,30 +154,5 @@ Rectangle {
 	onActiveFocusChanged: {
 		if(this.activeFocus)
 			buttonClose.setFocus();
-	}
-
-	function nextExercise() {
-		if(this.exerciseIndex >= utils.exerciseItems.length) {
-			var results;
-            if(results = load("results")) {
-                results.trainings++;
-                
-				if(utils.dateToString(utils.currentDate) != results.lastDate) {
-					results.days++;
-					results.lastDate = utils.dateToString(utils.currentDate);
-				}				
-            }
-            else {
-                results = { days: 1, trainings: 1, exercises: utils.exerciseItems.length, lastDate: utils.dateToString(utils.currentDate) };
-            }
-            save("results", results);
-
-			container.showChildByTag("training", true);
-			return;
-		}
-		if(this.exerciseIndex == utils.exerciseItems.length - 1) {
-			exercise.showButtonFinish();
-		}
-		exercise.setExerciseData(utils.exerciseItems[this.exerciseIndex++]);
 	}
 }
