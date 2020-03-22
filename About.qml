@@ -6,56 +6,56 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Rectangle {
-	
-	signal closed;
+    
+    signal closed;
 
     TitleText {
-		id: header;
-		color: engine.colors.headerText;
-		text: tr("О программе");
-	}
-	Button {
-		id: buttonClose;
+        id: header;
+        color: engine.colors.headerText;
+        text: tr("О программе");
+    }
+    Button {
+        id: buttonClose;
 
-		anchors.right: parent.right;
-		width: height;
+        anchors.right: parent.right;
+        width: height;
 
-		text: "X";
-		borderWidth: 2;
-		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-		borderColor: textColor;
-		radius: 10;
+        text: "X";
+        borderWidth: 2;
+        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
+        borderColor: textColor;
+        radius: 10;
 
-		onSelectPressed: {
-			parent.closed();
-		}
-	}
+        onSelectPressed: {
+            parent.closed();
+        }
+    }
 
-	Resource {
-		url: engine.resourcesPath + "about.json";
-		onDataChanged: {
-			this.description.text = (JSON.parse(this.data)).text;
-		}
-	}
+    Resource {
+        url: engine.resourcesPath + "about.json";
+        onDataChanged: {
+            this.description.text = (JSON.parse(this.data)).text;
+        }
+    }
 
-	BodyText {
-		id: description;
+    BodyText {
+        id: description;
 
-		anchors.top: header.bottom;
+        anchors.top: header.bottom;
         anchors.topMargin: engine.margin;
         anchors.left: parent.left;
         anchors.right: parent.right;
         
-		color: engine.colors.textColor;	
-        wrapMode: WordWrap;	
-	}
-	Image {
-		anchors.right: parent.right;
-		anchors.bottom: parent.bottom;
-		height: engine.teamHeight;
-		width: engine.teamWidth;
-		source: engine.resourcesPath + "team.png";
-		fillMode: PreserveAspectFit;
-	}
+        color: engine.colors.textColor;    
+        wrapMode: WordWrap;    
+    }
+    Image {
+        anchors.right: parent.right;
+        anchors.bottom: parent.bottom;
+        height: engine.teamHeight;
+        width: engine.teamWidth;
+        source: engine.resourcesPath + "team.png";
+        fillMode: PreserveAspectFit;
+    }
 }

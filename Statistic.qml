@@ -6,129 +6,129 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Rectangle {
-	
-	signal closed;
+    
+    signal closed;
 
-	TitleText {
-		id: header;
-		color: engine.colors.headerText;
-		text: tr("Статистика");
-	}
-	Button {
-		id: buttonClose;
+    TitleText {
+        id: header;
+        color: engine.colors.headerText;
+        text: tr("Статистика");
+    }
+    Button {
+        id: buttonClose;
 
-		anchors.right: parent.right;
-		width: height;
+        anchors.right: parent.right;
+        width: height;
 
-		text: "X";
-		borderWidth: 2;
-		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-		borderColor: textColor;
-		radius: 10;
+        text: "X";
+        borderWidth: 2;
+        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
+        borderColor: textColor;
+        radius: 10;
 
-		onSelectPressed: {
-			parent.closed();
-		}
-		onKeyPressed: {		
-			if (key == "Up" || key == "Down") {
-				buttonClear.setFocus();
-				return true;
-			}				
-		}
-	}
+        onSelectPressed: {
+            parent.closed();
+        }
+        onKeyPressed: {        
+            if (key == "Up" || key == "Down") {
+                buttonClear.setFocus();
+                return true;
+            }                
+        }
+    }
 
-	BodyText {
-		id: textName;
-		anchors.top: header.bottom;
-		anchors.topMargin: engine.margin;
-		color: engine.colors.textColor;
-	}
-	BodyText {
-		id: textAge;
-		anchors.top: textName.bottom;
-		anchors.topMargin: engine.margin;
-		color: engine.colors.textColor;
-	}
-	BodyText {
-		id: textIndex;
-		anchors.top: textAge.bottom;
-		anchors.topMargin: engine.margin;
-		color: engine.colors.textColor;
-	}
-	BodyText {
-		id: textDays;
-		anchors.top: textIndex.bottom;
-		anchors.topMargin: engine.margin;
-		color: engine.colors.textColor;
-	}
-	BodyText {
-		id: textTrainings;
-		anchors.top: textDays.bottom;
-		anchors.topMargin: engine.margin;
-		color: engine.colors.textColor;
-	}
-	BodyText {
-		id: textExercises;
-		anchors.top: textTrainings.bottom;
-		anchors.topMargin: engine.margin;
-		color: engine.colors.textColor;
-	}
-	BodyText {
-		id: textExercisesByDay;
-		anchors.top: textExercises.bottom;
-		anchors.topMargin: engine.margin;
-		color: engine.colors.textColor;
-	}
-	BodyText {
-		id: textLastDate;
-		anchors.top: textExercisesByDay.bottom;
-		anchors.topMargin: engine.margin;
-		color: engine.colors.textColor;
-	}
+    BodyText {
+        id: textName;
+        anchors.top: header.bottom;
+        anchors.topMargin: engine.margin;
+        color: engine.colors.textColor;
+    }
+    BodyText {
+        id: textAge;
+        anchors.top: textName.bottom;
+        anchors.topMargin: engine.margin;
+        color: engine.colors.textColor;
+    }
+    BodyText {
+        id: textIndex;
+        anchors.top: textAge.bottom;
+        anchors.topMargin: engine.margin;
+        color: engine.colors.textColor;
+    }
+    BodyText {
+        id: textDays;
+        anchors.top: textIndex.bottom;
+        anchors.topMargin: engine.margin;
+        color: engine.colors.textColor;
+    }
+    BodyText {
+        id: textTrainings;
+        anchors.top: textDays.bottom;
+        anchors.topMargin: engine.margin;
+        color: engine.colors.textColor;
+    }
+    BodyText {
+        id: textExercises;
+        anchors.top: textTrainings.bottom;
+        anchors.topMargin: engine.margin;
+        color: engine.colors.textColor;
+    }
+    BodyText {
+        id: textExercisesByDay;
+        anchors.top: textExercises.bottom;
+        anchors.topMargin: engine.margin;
+        color: engine.colors.textColor;
+    }
+    BodyText {
+        id: textLastDate;
+        anchors.top: textExercisesByDay.bottom;
+        anchors.topMargin: engine.margin;
+        color: engine.colors.textColor;
+    }
 
-	Button {
-		id: buttonClear;
+    Button {
+        id: buttonClear;
 
-		anchors.bottom: parent.bottom;
-		anchors.horizontalCenter: parent.horizontalCenter;
+        anchors.bottom: parent.bottom;
+        anchors.horizontalCenter: parent.horizontalCenter;
 
-		text: tr("Сбросить");
-		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-		borderColor: textColor;
-		borderWidth: 2;
+        text: tr("Сбросить");
+        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
+        borderColor: textColor;
+        borderWidth: 2;
 
-		onSelectPressed: {
-			engine.resetResults();
-			parent.loadResults();
-			parent.closed();
-		}
-		onKeyPressed: {		
-			if (key == "Up" || key == "Down") {
-				buttonClose.setFocus();
-            	return true;
-			}				
-		}
-	}
+        onSelectPressed: {
+            engine.resetResults();
+            parent.loadResults();
+            parent.closed();
+        }
+        onKeyPressed: {        
+            if (key == "Up" || key == "Down") {
+                buttonClose.setFocus();
+                return true;
+            }                
+        }
+    }
 
-	onActiveFocusChanged: {
-		if(this.activeFocus) {
-			buttonClose.setFocus();
+    onActiveFocusChanged: {
+        if(this.activeFocus) {
+            buttonClose.setFocus();
 
-			textName.text = tr("Имя: ") + engine.user.name;
-			textAge.text = tr("Возраст: ~") + engine.getAge();
-			textIndex.text = tr("Индекс массы тела: ") + engine.indexKetle(true);
-			
-			this.loadResults();
-		}
-	}
+            textName.text = tr("Имя: ") + engine.user.name;
+            textAge.text = tr("Возраст: ~") + engine.getAge();
+            textIndex.text = tr("Индекс массы тела: ") + engine.indexKetle(true);
+            
+            this.loadResults();
+        }
+    }
 
-	function loadResults() {		
-		textDays.text = tr("Количество дней: ") + engine.results.days;
-		textTrainings.text = tr("Завершено тренировок: ") + engine.results.trainings;
-		textExercises.text = tr("Выполнено упражнений: ") + engine.results.exercises;
-		textExercisesByDay.text = tr("Среднее количество упражений в день: ") + Math.floor(engine.results.exercises / (engine.results.days == 0 ? 1 : engine.results.days));
-		textLastDate.text = tr("Последняя тренировка: ") + engine.results.lastDate;
-	}
+    function loadResults() {        
+        textDays.text = tr("Количество дней: ") + engine.results.days;
+        textTrainings.text = tr("Завершено тренировок: ") + engine.results.trainings;
+        textExercises.text = tr("Выполнено упражнений: ") + engine.results.exercises;
+        textExercisesByDay.text = tr("Среднее количество упражений в день: ") + Math.floor(engine.results.exercises / (engine.results.days == 0 ? 1 : engine.results.days));
+        textLastDate.text = tr("Последняя тренировка: ") + engine.results.lastDate;
+    }
 }

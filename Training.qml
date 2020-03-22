@@ -7,152 +7,152 @@
 
 Rectangle {
 
-	signal exerciseStarted(index);
-	signal trainingStarted;
-	signal closed;
+    signal exerciseStarted(index);
+    signal trainingStarted;
+    signal closed;
 
-	TitleText {
-		id: header;
-		color: engine.colors.headerText;
-		text: tr("Тренировка");
-	}
-	Button {
-		id: buttonClose;
+    TitleText {
+        id: header;
+        color: engine.colors.headerText;
+        text: tr("Тренировка");
+    }
+    Button {
+        id: buttonClose;
 
-		anchors.right: parent.right;
-		width: height;
+        anchors.right: parent.right;
+        width: height;
 
-		text: "X";
-		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-		borderColor: textColor;
-		borderWidth: 2;
-		radius: 10;
+        text: "X";
+        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
+        borderColor: textColor;
+        borderWidth: 2;
+        radius: 10;
 
-		onSelectPressed: {
-			parent.closed();
-		}
-		onKeyPressed: {		
-			if (key == "Up") {
-				buttonSelect.setFocus();
-				return true;
-			}
-			if (key == "Down") {
-				buttonStart.setFocus();
-				return true;
-			}
-		}
-	}
-	
-	BodyText {
-		id: textTraining;
+        onSelectPressed: {
+            parent.closed();
+        }
+        onKeyPressed: {        
+            if (key == "Up") {
+                buttonSelect.setFocus();
+                return true;
+            }
+            if (key == "Down") {
+                buttonStart.setFocus();
+                return true;
+            }
+        }
+    }
+    
+    BodyText {
+        id: textTraining;
 
-		anchors.top: header.bottom;
-		anchors.topMargin: engine.margin;
+        anchors.top: header.bottom;
+        anchors.topMargin: engine.margin;
 
-		text: tr("Для начала тенировки нажмите \"Старт\"");
-		color: engine.colors.textColor;
-	}
-	Button {
-		id: buttonStart; 
+        text: tr("Для начала тенировки нажмите \"Старт\"");
+        color: engine.colors.textColor;
+    }
+    Button {
+        id: buttonStart; 
 
-		anchors.top: textTraining.bottom;
-		anchors.horizontalCenter: parent.horizontalCenter;
-		anchors.topMargin: engine.margin;
+        anchors.top: textTraining.bottom;
+        anchors.horizontalCenter: parent.horizontalCenter;
+        anchors.topMargin: engine.margin;
 
-		text: tr("Старт");
-		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-		borderColor: textColor;
-		borderWidth: 2;
+        text: tr("Старт");
+        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
+        borderColor: textColor;
+        borderWidth: 2;
 
-		onSelectPressed: {
-			parent.trainingStarted();
-		}
+        onSelectPressed: {
+            parent.trainingStarted();
+        }
 
-		onKeyPressed: {		
-			if (key == "Up") {
-				buttonClose.setFocus();
-				return true;
-			}
-			if (key == "Down") {
-				exerciseChooser.setFocus();				
-				return true;
-			}			
-		}
-	}
+        onKeyPressed: {        
+            if (key == "Up") {
+                buttonClose.setFocus();
+                return true;
+            }
+            if (key == "Down") {
+                exerciseChooser.setFocus();                
+                return true;
+            }            
+        }
+    }
 
-	BodyText {
-		id: textExercise;
-						
-		anchors.top: buttonStart.bottom;
-		anchors.left: parent.left; 
-		anchors.topMargin: engine.margin;
+    BodyText {
+        id: textExercise;
+                        
+        anchors.top: buttonStart.bottom;
+        anchors.left: parent.left; 
+        anchors.topMargin: engine.margin;
 
-		text: tr("Выбрать одно упражнение");
-		color: engine.colors.textColor;
-	}
-	Chooser {
-		id: exerciseChooser;     
-			
-		anchors.top: textExercise.bottom;
-		anchors.left: parent.left;        
-		anchors.right: parent.right;  
-		anchors.topMargin: engine.margin;
-			
-		backgroundVisible: false;
-		textColor: engine.colors.textColor;
-		focusTextColor: engine.colors.focusText;
-		highlightColor: activeFocus ? engine.colors.focusBackground : engine.colors.textColor;
+        text: tr("Выбрать одно упражнение");
+        color: engine.colors.textColor;
+    }
+    Chooser {
+        id: exerciseChooser;     
+            
+        anchors.top: textExercise.bottom;
+        anchors.left: parent.left;        
+        anchors.right: parent.right;  
+        anchors.topMargin: engine.margin;
+            
+        backgroundVisible: false;
+        textColor: engine.colors.textColor;
+        focusTextColor: engine.colors.focusText;
+        highlightColor: activeFocus ? engine.colors.focusBackground : engine.colors.textColor;
 
-		model: ListModel { }
+        model: ListModel { }
 
-		onKeyPressed: {		
-			if (key == "Up") {
-				buttonStart.setFocus();
-				return true;
-			}
-			if (key == "Down") {
-				buttonSelect.setFocus();
-				return true;
-			}				
-		}
-		
-		onCompleted: {		
-			engine.loadExerciseList(this);
-		}
-	}
-	Button {
-		id: buttonSelect; 
+        onKeyPressed: {        
+            if (key == "Up") {
+                buttonStart.setFocus();
+                return true;
+            }
+            if (key == "Down") {
+                buttonSelect.setFocus();
+                return true;
+            }                
+        }
+        
+        onCompleted: {        
+            engine.loadExerciseList(this);
+        }
+    }
+    Button {
+        id: buttonSelect; 
 
-		anchors.top: exerciseChooser.bottom;
-		anchors.right: parent.right;  
-		anchors.topMargin: engine.margin;
+        anchors.top: exerciseChooser.bottom;
+        anchors.right: parent.right;  
+        anchors.topMargin: engine.margin;
 
-		text: tr("Выполнить");
-		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-		borderColor: textColor;
-		borderWidth: 2;
+        text: tr("Выполнить");
+        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
+        borderColor: textColor;
+        borderWidth: 2;
 
-		onSelectPressed: {
-			parent.exerciseStarted(exerciseChooser.currentIndex);
-		}
+        onSelectPressed: {
+            parent.exerciseStarted(exerciseChooser.currentIndex);
+        }
 
-		onKeyPressed: {		
-			if (key == "Up") {
-				exerciseChooser.setFocus();
-				return true;
-			}
-			if (key == "Down") {
-				buttonClose.setFocus();
-				return true;
-			}			
-		}
-	}
+        onKeyPressed: {        
+            if (key == "Up") {
+                exerciseChooser.setFocus();
+                return true;
+            }
+            if (key == "Down") {
+                buttonClose.setFocus();
+                return true;
+            }            
+        }
+    }
 
-	onActiveFocusChanged: {
-		if(this.activeFocus)
-			buttonClose.setFocus();
-	}
+    onActiveFocusChanged: {
+        if(this.activeFocus)
+            buttonClose.setFocus();
+    }
 }

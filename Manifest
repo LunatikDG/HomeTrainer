@@ -1,12 +1,12 @@
 {
-	"id": "hometrainer",
-	"display": { 
-		"name": {
-			"rus": "Домашний тренер",
-			"eng": "Home trainer"
-		}, 
-		"icon": "resources/icon.png" 
-	},
-	"application": { },
-	"version": 1
+    "id": "hometrainer",
+    "display": { 
+        "name": {
+            "rus": "Домашний тренер",
+            "eng": "Home trainer"
+        }, 
+        "icon": "resources/icon.png" 
+    },
+    "application": { },
+    "version": 1
 }

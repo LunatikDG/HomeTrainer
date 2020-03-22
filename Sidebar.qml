@@ -9,60 +9,60 @@ import "Menu.qml";
 
 Rectangle {
 
-	signal menuSelected(target);
+    signal menuSelected(target);
 
-	Image {
-		id: logo;
+    Image {
+        id: logo;
 
-		anchors.top: parent.top;
-		anchors.left: parent.left;
-		anchors.margins: engine.marginHalf;
+        anchors.top: parent.top;
+        anchors.left: parent.left;
+        anchors.margins: engine.marginHalf;
 
-		source: engine.resourcesPath + "logo.png";
-		fillMode: PreserveAspectFit;
-	}
-	Rectangle {
-		id: hline;
+        source: engine.resourcesPath + "logo.png";
+        fillMode: PreserveAspectFit;
+    }
+    Rectangle {
+        id: hline;
 
-		anchors.top: logo.bottom;
-		anchors.left: parent.left;
-		anchors.right: parent.right;
-		anchors.margins: engine.marginHalf;
+        anchors.top: logo.bottom;
+        anchors.left: parent.left;
+        anchors.right: parent.right;
+        anchors.margins: engine.marginHalf;
 
-		height: 2;
-		color: engine.colors.focusText;
-	}
+        height: 2;
+        color: engine.colors.focusText;
+    }
 
-	Item {
-		id: name;
+    Item {
+        id: name;
 
-		anchors.top: hline.bottom;
-		anchors.margins: engine.marginHalf;
-		anchors.topMargin: engine.margin;
+        anchors.top: hline.bottom;
+        anchors.margins: engine.marginHalf;
+        anchors.topMargin: engine.margin;
 
-		width: parent.width;
-		
-		BodyText {
-			id: nameText;
-			anchors.centerIn: parent;
-			color: engine.colors.userName;
-		}
-	}
+        width: parent.width;
+        
+        BodyText {
+            id: nameText;
+            anchors.centerIn: parent;
+            color: engine.colors.userName;
+        }
+    }
 
-	Menu {
-		id: menu;
-		anchors.top: name.bottom;
-		anchors.left: parent.left;
+    Menu {
+        id: menu;
+        anchors.top: name.bottom;
+        anchors.left: parent.left;
         anchors.right: parent.right;
         anchors.bottom: parent.bottom;
-		anchors.margins: engine.marginHalf;
-		anchors.topMargin: engine.margin;
+        anchors.margins: engine.marginHalf;
+        anchors.topMargin: engine.margin;
 
-		onSelectPressed: {
-			parent.menuSelected(this.model.get(this.currentIndex).target);
-		}
-	}
-	function update() {		
-		engine.updateSidebar(nameText, menu);
-	}
+        onSelectPressed: {
+            parent.menuSelected(this.model.get(this.currentIndex).target);
+        }
+    }
+    function update() {        
+        engine.updateSidebar(nameText, menu);
+    }
 }

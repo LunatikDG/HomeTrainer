@@ -7,22 +7,22 @@
 
 ListView {
 
-	focus: true;
+    focus: true;
 
-	model: ListModel { }
+    model: ListModel { }
 
-	delegate: Button { 
-		text: tr(model.name);
-		width: engine.userButtonWidth;
-		color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-		textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-		borderColor: textColor;
-		borderWidth: 1;
-		anchors.horizontalCenter: parent.horizontalCenter;
-	}
+    delegate: Button { 
+        text: tr(model.name);
+        width: engine.userButtonWidth;
+        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
+        borderColor: textColor;
+        borderWidth: 1;
+        anchors.horizontalCenter: parent.horizontalCenter;
+    }
 
-	onActiveFocusChanged: {
-		if(this.activeFocus) 
-			this.currentIndex = 0;
-	}
+    onActiveFocusChanged: {
+        if(this.activeFocus) 
+            this.currentIndex = 0;
+    }
 }
