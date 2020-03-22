@@ -6,47 +6,47 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Item {
-	id: delegateItem;
-	focus: true;
+    id: delegateItem;
+    focus: true;
 
-	width: 20 + chooserDelegateText.width * chooserDelegateText.visible + chooserIcon.width * chooserIcon.visible + (chooserIcon.visible && chooserDelegateText.visible) * 10;
-	height: parent.height;
+    width: 20 + chooserDelegateText.width * chooserDelegateText.visible + chooserIcon.width * chooserIcon.visible + (chooserIcon.visible && chooserDelegateText.visible) * 10;
+    height: parent.height;
 
 //------------properties-----------------------------------
 
-	property Color textColor;
+    property Color textColor;
 
 //------------structure------------------------------------
 
-	Image {
-		id: chooserIcon;
+    Image {
+        id: chooserIcon;
 
-		anchors.verticalCenter: parent.verticalCenter;
-		anchors.left: parent.left;
-		anchors.leftMargin: 10;
+        anchors.verticalCenter: parent.verticalCenter;
+        anchors.left: parent.left;
+        anchors.leftMargin: 10;
 
-		source: model.icon;	
-		color: parent.textColor;	
-		opacity: parent.focused ? 1 : 0.65;
-		visible: model.icon != undefined ? source != "" : false;
-		
-		Behavior on color { animation: Animation { duration: 300; } }
-		Behavior on opacity { animation: Animation { duration: 300; } }
-	}
-	
-	BodyText {
-		id: chooserDelegateText;
+        source: model.icon;    
+        color: parent.textColor;    
+        opacity: parent.focused ? 1 : 0.65;
+        visible: model.icon != undefined ? source != "" : false;
+        
+        Behavior on color { animation: Animation { duration: 300; } }
+        Behavior on opacity { animation: Animation { duration: 300; } }
+    }
+    
+    BodyText {
+        id: chooserDelegateText;
 
-		anchors.verticalCenter: parent.verticalCenter;
-		anchors.right: parent.right;
-		anchors.rightMargin: 10;
+        anchors.verticalCenter: parent.verticalCenter;
+        anchors.right: parent.right;
+        anchors.rightMargin: 10;
 
-		text: model.text;
-		color: parent.textColor;
-		opacity: parent.focused ? 1 : 0.65;
-		visible: model.text != undefined ? text != "" : false;
-		
-		Behavior on color { animation: Animation { duration: 300; } }
-		Behavior on opacity { animation: Animation { duration: 300; } }
-	}
+        text: model.text;
+        color: parent.textColor;
+        opacity: parent.focused ? 1 : 0.65;
+        visible: model.text != undefined ? text != "" : false;
+        
+        Behavior on color { animation: Animation { duration: 300; } }
+        Behavior on opacity { animation: Animation { duration: 300; } }
+    }
 }

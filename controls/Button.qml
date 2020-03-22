@@ -6,11 +6,11 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Rectangle {
-	id: simpleButton;
+    id: simpleButton;
     focus: true;
 
     height: buttonText.paintedHeight + borderWidth + 30;
-	width: Math.max(140, buttonText.width + borderWidth + 30);
+    width: Math.max(140, buttonText.width + borderWidth + 30);
 
     borderWidth: 0;
     radius: 3;
@@ -19,22 +19,22 @@ Rectangle {
 
 //------------properties-----------------------------------
 
-	property string text;
-	property Color textColor: activeFocus ? colorTheme.focusedTextColor : colorTheme.activeTextColor;
+    property string text;
+    property Color textColor: activeFocus ? colorTheme.focusedTextColor : colorTheme.activeTextColor;
 
 //------------structure------------------------------------
 
-	BodyText {
-		id: buttonText;
+    BodyText {
+        id: buttonText;
 
         anchors.centerIn: parent;
-		
+        
         opacity: parent.enabled ? 1 : 0.4;
-		color: parent.textColor;
-		text: parent.text;		
+        color: parent.textColor;
+        text: parent.text;        
 
-		Behavior on color { animation: Animation { duration: 300; } }
-	}
+        Behavior on color { animation: Animation { duration: 300; } }
+    }
 
 //------------animations-----------------------------------
 
