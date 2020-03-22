@@ -50,4 +50,12 @@ Rectangle {
 		color: engine.colors.textColor;	
         wrapMode: WordWrap;	
 	}
+	Image {
+		anchors.right: parent.right;
+		anchors.bottom: parent.bottom;
+		height: engine.teamHeight;
+		width: engine.teamWidth;
+		source: engine.resourcesPath + "team.png";
+		fillMode: PreserveAspectFit;
+	}
 }
