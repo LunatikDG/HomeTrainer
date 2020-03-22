@@ -51,8 +51,14 @@ Rectangle {
 		color: engine.colors.textColor;
 	}
 	BodyText {
-		id: textDays;
+		id: textIndex;
 		anchors.top: textAge.bottom;
+		anchors.topMargin: engine.margin;
+		color: engine.colors.textColor;
+	}
+	BodyText {
+		id: textDays;
+		anchors.top: textIndex.bottom;
 		anchors.topMargin: engine.margin;
 		color: engine.colors.textColor;
 	}
@@ -112,6 +118,7 @@ Rectangle {
 
 			textName.text = tr("Имя: ") + engine.user.name;
 			textAge.text = tr("Возраст: ~") + engine.getAge();
+			textIndex.text = tr("Индекс массы тела: ") + engine.indexKetle(true);
 			
 			this.loadResults();
 		}

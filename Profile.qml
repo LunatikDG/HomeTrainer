@@ -7,7 +7,7 @@
 
 Rectangle {
 
-	signal userDataSaved(name);
+	signal userDataSaved(nameEdit);
 	signal closed;
 
     TitleText {
@@ -38,7 +38,7 @@ Rectangle {
 				return true;
 			}	
 			if (key == "Down") {
-				name.setFocus();
+				nameEdit.setFocus();
 				return true;
 			}				
 		}
@@ -48,23 +48,21 @@ Rectangle {
 		anchors.top: header.bottom;
 		anchors.topMargin: engine.margin;
 
-		width: 550;
+		width: engine.rowWidth;
 
-		BodyText {
-			id: textName;
-						
-			anchors.verticalCenter: name.verticalCenter;
+		BodyText {						
+			anchors.verticalCenter: nameEdit.verticalCenter;
 
 			text: tr("Имя:");
 			color: engine.colors.textColor;
 		}
 		
 		Edit {
-			id: name;
+			id: nameEdit;
 			
 			anchors.right: parent.right;
 
-			width: 350;
+			width: engine.editWidth;
 
 			maxLen: 15;
 			
@@ -80,33 +78,31 @@ Rectangle {
 					return true;
 				}	
 				if (key == "Down") {
-					birthday.setFocus();
+					birthdayEdit.setFocus();
 					return true;
 				}		
 			}			
 		}
 	}	
 	Item {
-		anchors.top: name.bottom;
+		anchors.top: nameEdit.bottom;
 		anchors.topMargin: engine.margin;
 
-		width: 550;
+		width: engine.rowWidth;
 
-		BodyText {
-			id: textBirthday;
-						
-			anchors.verticalCenter: birthday.verticalCenter;
+		BodyText {						
+			anchors.verticalCenter: birthdayEdit.verticalCenter;
 
 			text: tr("Год рождения:");
 			color: engine.colors.textColor;
 		}
 
 		Edit {
-			id: birthday;
+			id: birthdayEdit;
 
 			anchors.right: parent.right;
 
-			width: 350;
+			width: engine.editWidth;
 
 			maxLen: 4;
 			validateChars: engine.editCharsNum;
@@ -118,7 +114,87 @@ Rectangle {
 
 			onKeyPressed: {
 				if (key == "Up") {
-					name.setFocus();
+					nameEdit.setFocus();
+					return true;
+				}
+				if (key == "Down") {
+					heightEdit.setFocus();
+					return true;
+				}										
+			}
+		}
+	}
+	Item {
+		anchors.top: birthdayEdit.bottom;
+		anchors.topMargin: engine.margin;
+
+		width: engine.rowWidth;
+
+		BodyText {						
+			anchors.verticalCenter: heightEdit.verticalCenter;
+
+			text: tr("Рост (см):");
+			color: engine.colors.textColor;
+		}
+
+		Edit {
+			id: heightEdit;
+
+			anchors.right: parent.right;
+
+			width: engine.editWidth;
+
+			maxLen: 3;
+			validateChars: engine.editCharsNum;
+			textColor: engine.colors.focusText;
+			cursorColor: engine.colors.focusText;
+			backColor: activeFocus ? engine.colors.focusBackground : engine.colors.textColor;
+			borderColor: engine.colors.focusText;
+			borderRadius: 0;
+
+			onKeyPressed: {
+				if (key == "Up") {
+					birthdayEdit.setFocus();
+					return true;
+				}
+				if (key == "Down") {
+					weightEdit.setFocus();
+					return true;
+				}										
+			}
+		}
+	}
+	Item {
+		anchors.top: heightEdit.bottom;
+		anchors.topMargin: engine.margin;
+
+		width: engine.rowWidth;
+
+		BodyText {						
+			anchors.verticalCenter: weightEdit.verticalCenter;
+
+			text: tr("Вес (кг):");
+			color: engine.colors.textColor;
+		}
+
+		Edit {
+			id: weightEdit;
+
+			anchors.right: parent.right;
+
+			width: engine.editWidth;
+
+			maxLen: 3;
+			validateChars: engine.editCharsNum;
+			textColor: engine.colors.focusText;
+			cursorColor: engine.colors.focusText;
+			backColor: activeFocus ? engine.colors.focusBackground : engine.colors.textColor;
+			borderColor: engine.colors.focusText;
+			borderRadius: 0;
+
+			onKeyPressed: {
+				if (key == "Up") {
+					heightEdit.setFocus();
 					return true;
 				}
 				if (key == "Down") {
@@ -127,19 +203,17 @@ Rectangle {
 				}										
 			}
 		}
-	}	
+	}
 
 	Item {
 		height: genderChooser.height;
-		width: 550;
+		width: engine.rowWidth;
 
-		anchors.top: birthday.bottom;
+		anchors.top: weightEdit.bottom;
 		anchors.left: parent.left;        
 		anchors.topMargin: engine.margin;
 
 		BodyText {
-			id: textGender;
-						
 			anchors.verticalCenter: parent.verticalCenter;
 
 			text: tr("Пол:");
@@ -159,7 +233,7 @@ Rectangle {
 
 			onKeyPressed: {		
 				if (key == "Up") {
-					birthday.setFocus();
+					weightEdit.setFocus();
 					return true;
 				}	
 				if (key == "Down") {
@@ -174,15 +248,13 @@ Rectangle {
 	}
 	Item {
 		height: levelChooser.height;
-		width: 550;
+		width: engine.rowWidth;
 
 		anchors.top: genderChooser.bottom;
 		anchors.left: parent.left;        
 		anchors.topMargin: engine.margin;
 
-		BodyText {
-			id: textLevel;
-						
+		BodyText {					
 			anchors.verticalCenter: parent.verticalCenter;
 
 			text: tr("Уровень:");
@@ -230,33 +302,56 @@ Rectangle {
 		borderWidth: 2;
 
 		onSelectPressed: {
-			var result = engine.saveUser(name.text, birthday.text, genderChooser.currentIndex, levelChooser.currentIndex);
-			switch (result) {
+			switch (engine.saveUser(nameEdit.text, birthdayEdit.text, heightEdit.text, weightEdit.text, genderChooser.currentIndex, levelChooser.currentIndex)) {
 				case "emptyName":
-					name.placeholderColor = engine.colors.error;
-					name.placeholder = tr("Не введено имя!");
-					name.setFocus();	
+					nameEdit.placeholderColor = engine.colors.error;
+					nameEdit.placeholder = tr("Не введено имя!");
+					nameEdit.setFocus();	
 					break;
 				case "profileBusy":
-					name.placeholderColor = engine.colors.error;
-					name.placeholder = tr("Профиль занят!");
-					name.text = "";
-					name.setFocus();	
+					nameEdit.placeholderColor = engine.colors.error;
+					nameEdit.placeholder = tr("Профиль занят!");
+					nameEdit.text = "";
+					nameEdit.setFocus();	
 					break;
 				case "emptyBirthday":
-					birthday.placeholderColor = engine.colors.error;
-					birthday.placeholder = tr("Не введен год рождения!");
-					birthday.text = "";
-					birthday.setFocus();
+					birthdayEdit.placeholderColor = engine.colors.error;
+					birthdayEdit.placeholder = tr("Не введен год рождения!");
+					birthdayEdit.text = "";
+					birthdayEdit.setFocus();
 					break;
 				case "invalidBirthday":
-					birthday.placeholderColor = engine.colors.error;
-					birthday.placeholder = tr("Неверно введен год рождения!");
-					birthday.text = "";
-					birthday.setFocus();
+					birthdayEdit.placeholderColor = engine.colors.error;
+					birthdayEdit.placeholder = tr("Неверно введен год рождения!");
+					birthdayEdit.text = "";
+					birthdayEdit.setFocus();
+					break;
+				case "emptyHeight":
+					heightEdit.placeholderColor = engine.colors.error;
+					heightEdit.placeholder = tr("Не указан рост!");
+					heightEdit.text = "";
+					heightEdit.setFocus();
+					break;
+				case "invalidHeight":
+					heightEdit.placeholderColor = engine.colors.error;
+					heightEdit.placeholder = tr("Неверно указан рост!");
+					heightEdit.text = "";
+					heightEdit.setFocus();
+					break;
+				case "emptyWeight":
+					weightEdit.placeholderColor = engine.colors.error;
+					weightEdit.placeholder = tr("Не указан вес!");
+					weightEdit.text = "";
+					weightEdit.setFocus();
+					break;
+				case "invalidWeight":
+					weightEdit.placeholderColor = engine.colors.error;
+					weightEdit.placeholder = tr("Неверно указан вес!");
+					weightEdit.text = "";
+					weightEdit.setFocus();
 					break;
 				case "success":
-					parent.userDataSaved(name.text);
+					parent.userDataSaved(nameEdit.text);
 					parent.closed();
 					break;
 			}
@@ -275,18 +370,24 @@ Rectangle {
 
 	onActiveFocusChanged: {
 		if(this.activeFocus) {
-			name.placeholder = tr("Введите имя");
-			name.placeholderColor = engine.colors.placeholder;
-			birthday.placeholder = tr("Введите год рождения");
-			birthday.placeholderColor = engine.colors.placeholder;
+			nameEdit.placeholder = tr("Введите имя");
+			nameEdit.placeholderColor = engine.colors.placeholder;
+			birthdayEdit.placeholder = tr("Введите год рождения");
+			birthdayEdit.placeholderColor = engine.colors.placeholder;
+			heightEdit.placeholder = tr("Укажите рост");
+			heightEdit.placeholderColor = engine.colors.placeholder;
+			weightEdit.placeholder = tr("Укажите вес");
+			weightEdit.placeholderColor = engine.colors.placeholder;
 
 			buttonClose.setFocus();
 		}
 	}
 
 	function update() {
-		this.name.text = engine.user.name;
-		this.birthday.text = engine.user.birthday;
+		this.nameEdit.text = engine.user.name;
+		this.birthdayEdit.text = engine.user.birthday;
+		this.heightEdit.text = engine.user.height;
+		this.weightEdit.text = engine.user.weight;
 		this.genderChooser.currentIndex = engine.user.gender;
 		this.levelChooser.currentIndex = engine.user.level;	
 	}
