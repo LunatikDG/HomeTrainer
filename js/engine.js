@@ -102,6 +102,8 @@ this.margin = 32;
 this.marginHalf = 16;
 this.logoAuthHeight = 128;
 this.userButtonWidth = 300;
+this.teamWidth = 160;
+this.teamHeight = this.teamWidth * 3 / 2;
 
 this.editCharsNum = "0123456789";
 
