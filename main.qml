@@ -9,7 +9,7 @@ import "Sidebar.qml";
 import "Profile.qml";
 import "Training.qml";
 import "About.qml";
-import "Statistic.qml";
+import "Statistics.qml";
 
 import "Exercise.qml";
 
@@ -110,11 +110,11 @@ Application {
                 exercise.setExercise(this.exerciseIndex++);
             }
         }        
-        Statistic { 
-            id: statistic;
+        Statistics { 
+            id: statistics;
             anchors.fill: parent;
             color: parent.color;
-            property var tag: "statistic";
+            property var tag: "statistics";
             onClosed: {
                 sidebar.setFocus();
             }
