@@ -152,7 +152,9 @@ Rectangle {
     }
 
     onActiveFocusChanged: {
-        if(this.activeFocus)
+        if(this.activeFocus) {
+            exerciseChooser.currentIndex = 0;
             buttonClose.setFocus();
+        }
     }
 }
