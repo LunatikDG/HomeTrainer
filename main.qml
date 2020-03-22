@@ -186,15 +186,6 @@ Application {
 			this.visible = false;
 		}
 	}
-	onCompleted: {
-		
-		var musers = [];
-		musers.push({ name: "123456789012345", birthday: 2000, gender: 0, level: 0 });
-		musers.push({ name: "Второй", birthday: 1990, gender: 0, level: 1 });
-		musers.push({ name: "Третий", birthday: 1980, gender: 0, level: 2 });
-
-		//save("users", musers);		
-	}
 	onActiveFocusChanged: {
 		if(this.activeFocus) {
 			authorization.visible = true;
