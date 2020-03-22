@@ -20,7 +20,7 @@ Rectangle {
 
 		source: engine.resourcesPath + "logo.png";
 		fillMode: PreserveAspectFit;
-    }
+	}
 	Rectangle {
 		id: hline;
 
