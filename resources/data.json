@@ -11,7 +11,7 @@
         },  
         { 
             "title": "Статистика", 
-            "target": "statistic" 
+            "target": "statistics" 
         },
         { 
             "title": "О программе", 
