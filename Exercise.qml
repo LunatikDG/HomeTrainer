@@ -7,14 +7,14 @@
 
 Rectangle {
 
-    signal closed;
-    signal done;
-    signal next;
+	signal closed;
+	signal done;
+	signal next;
 
-    property bool showButtonNext: false;
-    property bool showButtonFinish: false;
+	property bool showButtonNext: false;
+	property bool showButtonFinish: false;
 
-    TitleText {
+	TitleText {
 		id: header;
 		color: engine.colors.headerText;
 		text: tr("Упражнение");
@@ -43,39 +43,39 @@ Rectangle {
 		}
 	}
     
-    SubheadText {
+	SubheadText {
 		id: title;
 		anchors.top: header.bottom;
 		anchors.topMargin: engine.margin;
 		color: engine.colors.textColor;		
 	}
-    BodyText {
+	BodyText {
 		id: description;
 
 		anchors.top: title.bottom;
-        anchors.topMargin: engine.marginHalf;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
+		anchors.topMargin: engine.marginHalf;
+		anchors.left: parent.left;
+		anchors.right: parent.right;
         
 		color: engine.colors.textColor;	
-        wrapMode: WordWrap;	
+		wrapMode: WordWrap;	
 	}
 
-    Image {
+	Image {
 		id: image;
 
 		anchors.top: description.bottom;
-        anchors.bottom: task.top;
-        anchors.left: parent.left;
-        anchors.right: parent.right;
-        anchors.topMargin: engine.marginHalf;
-        anchors.bottomMargin: engine.marginHalf;
+		anchors.bottom: task.top;
+		anchors.left: parent.left;
+		anchors.right: parent.right;
+		anchors.topMargin: engine.marginHalf;
+		anchors.bottomMargin: engine.marginHalf;
 
 		fillMode: PreserveAspectFit;
-    }
+	}
 
-    Rectangle {
-        id: task;
+	Rectangle {
+		id: task;
 
         anchors.bottom: parent.bottom;
         anchors.left: parent.left;
