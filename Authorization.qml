@@ -49,7 +49,12 @@ Rectangle {
 			}
 			onKeyPressed: {		
 				if (key == "Up") {
-					buttonNew.setFocus();
+					if(buttonNew.visible)
+						buttonNew.setFocus();
+					else {
+						userList.setFocus();
+						userList.currentIndex = userList.model.count - 1;
+					}
 					return true;
 				}
 				if (key == "Down") {
@@ -89,7 +94,10 @@ Rectangle {
 				return true;
 			}	
 			if (key == "Down" && this.currentIndex == this.model.count - 1) {
-				buttonNew.setFocus();
+				if(buttonNew.visible)
+					buttonNew.setFocus();
+				else
+					buttonClose.setFocus();
 				return true;
 			}				
 		}
