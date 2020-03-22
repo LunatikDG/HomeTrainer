@@ -10,7 +10,7 @@ Rectangle {
 	signal userDataSaved(nameEdit);
 	signal closed;
 
-    TitleText {
+	TitleText {
 		id: header;
 		color: engine.colors.headerText;
 		text: tr("Профиль");
