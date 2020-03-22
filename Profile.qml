@@ -7,7 +7,7 @@
 
 Rectangle {
 
-    signal userDataSaved(nameEdit);
+    signal userDataSaved;
     signal closed;
 
     TitleText {
