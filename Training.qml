@@ -11,7 +11,7 @@ Rectangle {
 	signal trainingStarted;
 	signal closed;
 
-    TitleText {
+	TitleText {
 		id: header;
 		color: engine.colors.headerText;
 		text: tr("Тренировка");
