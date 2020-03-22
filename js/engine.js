@@ -104,6 +104,8 @@ this.logoAuthHeight = 128;
 this.userButtonWidth = 300;
 this.teamWidth = 160;
 this.teamHeight = this.teamWidth * 3 / 2;
+this.rowWidth = 550;
+this.editWidth = 350;
 
 this.editCharsNum = "0123456789";
 
@@ -119,7 +121,7 @@ this.getAge = () => {
 	return (new Date().getFullYear()) - parseInt(this.user.birthday);
 };
 this.calculateTimes = (times) => {
-	var result = times;
+	var result = times / (1 + Math.abs(this.indexKetle(false) / 22 - 1));
 	result *= this.genderItems[this.user.gender].level * this.levelItems[this.user.level].level;
 	var age = this.getAge();
 	if(age < 15 || age > 50) {
@@ -127,12 +129,28 @@ this.calculateTimes = (times) => {
 	}
 	else if (age > 25) {
 		result *= 0.9;
-	} 
+	}
 	else if (age > 35) {
 		result *= 0.8;
 	}
-	return Math.floor(result); 
+	return Math.round(result); 
 };
+this.indexKetle = (withDescription) => {
+	var index = Math.round(100000 * this.user.weight / (this.user.height * this.user.height)) / 10;
+	if(!withDescription)
+		return index;
+	if(index < 18.5)
+		return index + " - дефицит массы тела";
+	if(index <= 24.9)
+		return index + " - нормальная масса тела";
+	if(index <= 29.9)
+		return index + " - избыточная масса тела (предожирение)";
+	if(index <= 34.9)
+		return index + " - ожирение I степени";
+	if(index <= 39.9)
+		return index + " - ожирение II степени";
+	return index + " - ожирение III степени";
+}
 
 this.user;
 this.results;
@@ -149,7 +167,7 @@ this.loadNames = () => {
 };
 
 this.newUser = () => {
-	this.user = { name: "", birthday: "", gender: 0, level: 0 };
+	this.user = { name: "", birthday: "", height: "", weight: "", gender: 0, level: 0 };
 }
 this.loadUser = (name) => {
 	var users;
@@ -161,7 +179,7 @@ this.loadUser = (name) => {
 			}
 	this.newUser();					
 };
-this.saveUser = (name, birthday, gender, level) => {
+this.saveUser = (name, birthday, height, weight, gender, level) => {
 	if(name == "")
 		return "emptyName";
 	if(this.isProfileBusy(name))
@@ -170,9 +188,17 @@ this.saveUser = (name, birthday, gender, level) => {
 		return "emptyBirthday";
 	if(birthday.length < 4 || birthday < 1900 || birthday > (new Date().getFullYear()))
 		return "invalidBirthday";
+	if(height == "")
+		return "emptyHeight";
+	if(height < 70 || height > 300)
+		return "invalidHeight";	
+	if(weight == "")
+		return "emptyWeight";
+	if(weight < 30 || weight > 300)
+		return "invalidWeight";
 	
 	var oldName = this.user.name;
-	this.user = { name: name, birthday: birthday, gender: gender, level: level };
+	this.user = { name: name, birthday: birthday, height: height, weight: weight, gender: gender, level: level };
 
 	var users;
 	if(!(users = load("users"))) {
