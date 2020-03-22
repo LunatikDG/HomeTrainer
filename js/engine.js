@@ -79,8 +79,7 @@ this.loadExerciseList = (list) => {
     });    
 }
 
-
-//utils
+//constants
 this.appPath = "apps/hometrainer/";
 this.resourcesPath = this.appPath + "resources/";
 
@@ -109,6 +108,7 @@ this.editWidth = 350;
 
 this.editCharsNum = "0123456789";
 
+//utils
 this.dateToString = (date) => {
     return (date.getDate() < 10 ? "0" : "") + date.getDate() + "." + (date.getMonth() + 1 < 10 ? "0" : "") + (date.getMonth() + 1) + "." + date.getFullYear();
 };
