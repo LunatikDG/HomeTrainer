@@ -351,7 +351,7 @@ Rectangle {
                     weightEdit.setFocus();
                     break;
                 case "success":
-                    parent.userDataSaved(nameEdit.text);
+                    parent.userDataSaved();
                     parent.closed();
                     break;
             }
