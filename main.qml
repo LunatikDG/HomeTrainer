@@ -6,10 +6,11 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import "Sidebar.qml";
+
 import "Profile.qml";
 import "Training.qml";
-import "About.qml";
 import "Statistics.qml";
+import "About.qml";
 
 import "Exercise.qml";
 
@@ -163,6 +164,7 @@ Application {
         color: parent.color;
 
         onBackPressed: {
+            engine.showNotify("exit");
             viewsFinder.closeApp();
         }
         onNewSelected: {
