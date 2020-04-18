@@ -8,40 +8,13 @@
 Rectangle {
 
     signal userDataSaved;
-    signal closed;
+
+    property bool isKeyboardClosed: false;
 
     TitleText {
         id: header;
         color: engine.colors.headerText;
         text: tr("Профиль");
-    }
-    Button {
-        id: buttonClose;
-
-        anchors.right: parent.right;
-        width: height;
-
-        text: "X";
-        borderWidth: 2;
-        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-        borderColor: textColor;
-        radius: 10;
-
-        onSelectPressed: {
-            parent.update();
-            parent.closed();
-        }
-        onKeyPressed: {        
-            if (key == "Up") {
-                buttonOK.setFocus();
-                return true;
-            }    
-            if (key == "Down") {
-                nameEdit.setFocus();
-                return true;
-            }                
-        }
     }
 
     Item {
@@ -74,14 +47,18 @@ Rectangle {
 
             onKeyPressed: {
                 if (key == "Up") {
-                    buttonClose.setFocus();
+                    buttonOK.setFocus();
                     return true;
                 }    
                 if (key == "Down") {
                     birthdayEdit.setFocus();
                     return true;
-                }        
-            }            
+                }  
+            }
+            onSelectPressed: {
+                keyboard.show(this);
+                return true;
+            }   
         }
     }    
     Item {
@@ -122,6 +99,10 @@ Rectangle {
                     return true;
                 }                                        
             }
+            onSelectPressed: {
+                keyboard.show(this);
+                return true;
+            } 
         }
     }
     Item {
@@ -162,6 +143,10 @@ Rectangle {
                     return true;
                 }                                        
             }
+            onSelectPressed: {
+                keyboard.show(this);
+                return true;
+            } 
         }
     }
     Item {
@@ -202,6 +187,10 @@ Rectangle {
                     return true;
                 }                                        
             }
+            onSelectPressed: {
+                keyboard.show(this);
+                return true;
+            } 
         }
     }
 
@@ -352,7 +341,6 @@ Rectangle {
                     break;
                 case "success":
                     parent.userDataSaved();
-                    parent.closed();
                     break;
             }
         }
@@ -362,14 +350,37 @@ Rectangle {
                 return true;
             }    
             if (key == "Down") {
-                buttonClose.setFocus();
+                nameEdit.setFocus();
                 return true;
             }                
         }
     }
 
+    VirtualKeyboard {
+        id: keyboard;
+
+        property var target;
+
+        onAccepted: {
+            target.text = engine.validateText(this.text, target.validateChars);
+            profile.isKeyboardClosed = true;
+        }
+        onRefused: {
+            profile.isKeyboardClosed = true;
+        }
+        function show(target) {
+            this.target = target;
+            this.initText = target.text;
+            this.passwordMode = target.passwordMode;
+            this.hint = target.placeholder;
+            this.maxTextLen = target.maxLen;
+
+            this.visible = true;
+        }
+    }
+
     onActiveFocusChanged: {
-        if(this.activeFocus) {
+        if(this.activeFocus && !this.isKeyboardClosed) {
             nameEdit.placeholder = tr("Введите имя");
             nameEdit.placeholderColor = engine.colors.placeholder;
             birthdayEdit.placeholder = tr("Введите год рождения");
@@ -379,7 +390,7 @@ Rectangle {
             weightEdit.placeholder = tr("Укажите вес");
             weightEdit.placeholderColor = engine.colors.placeholder;
 
-            buttonClose.setFocus();
+            nameEdit.setFocus();
         }
     }
 

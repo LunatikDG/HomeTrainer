@@ -9,39 +9,11 @@ Rectangle {
 
     signal exerciseStarted(index);
     signal trainingStarted;
-    signal closed;
 
     TitleText {
         id: header;
         color: engine.colors.headerText;
         text: tr("Тренировка");
-    }
-    Button {
-        id: buttonClose;
-
-        anchors.right: parent.right;
-        width: height;
-
-        text: "X";
-        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-        borderColor: textColor;
-        borderWidth: 2;
-        radius: 10;
-
-        onSelectPressed: {
-            parent.closed();
-        }
-        onKeyPressed: {        
-            if (key == "Up") {
-                buttonSelect.setFocus();
-                return true;
-            }
-            if (key == "Down") {
-                buttonStart.setFocus();
-                return true;
-            }
-        }
     }
     
     BodyText {
@@ -72,7 +44,7 @@ Rectangle {
 
         onKeyPressed: {        
             if (key == "Up") {
-                buttonClose.setFocus();
+                buttonSelect.setFocus();
                 return true;
             }
             if (key == "Down") {
@@ -145,7 +117,7 @@ Rectangle {
                 return true;
             }
             if (key == "Down") {
-                buttonClose.setFocus();
+                buttonStart.setFocus();
                 return true;
             }            
         }
@@ -154,7 +126,7 @@ Rectangle {
     onActiveFocusChanged: {
         if(this.activeFocus) {
             exerciseChooser.currentIndex = 0;
-            buttonClose.setFocus();
+            buttonStart.setFocus();
         }
     }
 }

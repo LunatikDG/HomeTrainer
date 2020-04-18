@@ -6,36 +6,11 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Rectangle {
-    
-    signal closed;
 
     TitleText {
         id: header;
         color: engine.colors.headerText;
         text: tr("Статистика");
-    }
-    Button {
-        id: buttonClose;
-
-        anchors.right: parent.right;
-        width: height;
-
-        text: "X";
-        borderWidth: 2;
-        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-        borderColor: textColor;
-        radius: 10;
-
-        onSelectPressed: {
-            parent.closed();
-        }
-        onKeyPressed: {        
-            if (key == "Up" || key == "Down") {
-                buttonClear.setFocus();
-                return true;
-            }                
-        }
     }
 
     BodyText {
@@ -102,20 +77,11 @@ Rectangle {
         onSelectPressed: {
             engine.resetResults();
             parent.loadResults();
-            parent.closed();
-        }
-        onKeyPressed: {        
-            if (key == "Up" || key == "Down") {
-                buttonClose.setFocus();
-                return true;
-            }                
         }
     }
 
     onActiveFocusChanged: {
         if(this.activeFocus) {
-            buttonClose.setFocus();
-
             textName.text = tr("Имя: ") + engine.user.name;
             textAge.text = tr("Возраст: ~") + engine.getAge();
             textIndex.text = tr("Индекс массы тела: ") + engine.indexKetle(true);

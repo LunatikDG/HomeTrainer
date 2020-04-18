@@ -30,7 +30,7 @@ Rectangle {
         anchors.bottom: parent.bottom;
         width: parent.width * progressBarItem.progress;
         color: progressBarItem.active ? progressBarItem.barColor : colorTheme.borderColor;
-        //radius: progressBarItem.radius;
+        radius: progressBarItem.radius;
 
         Behavior on opacity { animation: Animation { duration: 500; } }
         Behavior on width { id: filledAreaWidthAnim; animation: Animation { duration: progressBarItem.animationDuration; } }

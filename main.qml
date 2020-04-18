@@ -33,6 +33,9 @@ Application {
             engine.loadData(JSON.parse(this.data));
         }
     }
+    NotificatorManager {
+        id: notificator;
+    }
 
     Sidebar { 
         id: sidebar;
@@ -42,13 +45,12 @@ Application {
         width: engine.menuWidth;
         color: engine.colors.backgroundSidebar;
 
+        onBackPressed: {
+            authorization.visible = true;
+            authorization.setFocus();
+        }
         onMenuSelected: {
-            if(target == "exit") {
-                authorization.visible = true;
-                authorization.setFocus();
-            }
-            else
-                engine.showByTag(container.children, target, true);
+            engine.showByTag(container.children, target, true);
         }
     }
     
@@ -70,9 +72,11 @@ Application {
             property var tag: "profile";
 
             onUserDataSaved: {
+                this.update();
                 sidebar.update();
             }
-            onClosed: {
+            onBackPressed: {
+                this.isKeyboardClosed = false;
                 sidebar.setFocus();
             }
         }
@@ -84,7 +88,7 @@ Application {
             
             property int exerciseIndex;
 
-            onClosed: {
+            onBackPressed: {
                 sidebar.setFocus();
             }
             onExerciseStarted: {
@@ -115,7 +119,7 @@ Application {
             anchors.fill: parent;
             color: parent.color;
             property var tag: "statistics";
-            onClosed: {
+            onBackPressed: {
                 sidebar.setFocus();
             }
         }
@@ -124,10 +128,6 @@ Application {
             anchors.fill: parent;            
             color: parent.color;
             property var tag: "about";
-
-            onClosed: {
-                sidebar.setFocus();
-            }
         }
 
         Exercise { 
@@ -136,15 +136,17 @@ Application {
             color: parent.color;
             property var tag: "exercise";
 
-            onClosed: {
+            onBackPressed: {
                 engine.showByTag(container.children, "training", true);
             }
+            
             onNext: {
                 engine.addExercise();
                 training.nextExercise();
             }
             onDone: {
                 engine.addExercise();
+                engine.showNotify("doneExercise");
                 engine.showByTag(container.children, "training", true);
             }
         }
@@ -153,7 +155,6 @@ Application {
             engine.showByTag(container.children, "profile", false);
         }
     }
-
     Authorization {
         id: authorization;
 
@@ -161,7 +162,7 @@ Application {
 
         color: parent.color;
 
-        onClosed: {
+        onBackPressed: {
             viewsFinder.closeApp();
         }
         onNewSelected: {
@@ -184,12 +185,14 @@ Application {
             engine.showByTag(container.children, "profile", false);
             sidebar.setFocus();
             this.visible = false;
+
+            if(engine.isNeedTraining()) {
+                engine.showNotify("needTraining");
+            }
         }
     }
-    onActiveFocusChanged: {
-        if(this.activeFocus) {
-            authorization.visible = true;
-            authorization.setFocus();
-        }
+    onStarted: {
+        authorization.visible = true;
+        authorization.setFocus();
     }
 }

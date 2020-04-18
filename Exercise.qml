@@ -7,7 +7,6 @@
 
 Rectangle {
 
-    signal closed;
     signal done;
     signal next;
 
@@ -18,29 +17,6 @@ Rectangle {
         id: header;
         color: engine.colors.headerText;
         text: tr("Упражнение");
-    }
-    Button {
-        id: buttonBack;
-
-        anchors.right: parent.right;
-        width: height;
-
-        text: "X";
-        borderWidth: 2;
-        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-        borderColor: textColor;
-        radius: 10;
-
-        onSelectPressed: {
-            parent.closed();
-        }
-        onKeyPressed: {        
-            if (key == "Up" || key == "Down") {
-                task.setFocus();
-                return true;
-            }                
-        }
     }
     
     SubheadText {
@@ -210,13 +186,6 @@ Rectangle {
                     return true;
                 }
             }
-        }
-
-        onKeyPressed: {        
-            if (key == "Up" || key == "Down") {
-                buttonBack.setFocus();
-                return true;
-            }                
         }
     }
 

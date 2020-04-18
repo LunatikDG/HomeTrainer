@@ -6,30 +6,11 @@
 // WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Rectangle {
-    
-    signal closed;
 
     TitleText {
         id: header;
         color: engine.colors.headerText;
         text: tr("О программе");
-    }
-    Button {
-        id: buttonClose;
-
-        anchors.right: parent.right;
-        width: height;
-
-        text: "X";
-        borderWidth: 2;
-        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
-        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
-        borderColor: textColor;
-        radius: 10;
-
-        onSelectPressed: {
-            parent.closed();
-        }
     }
 
     Resource {

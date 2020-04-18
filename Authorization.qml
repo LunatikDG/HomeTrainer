@@ -9,7 +9,6 @@ import "UserList.qml";
 
 Rectangle {
 
-    signal closed;
     signal newSelected;
     signal userSelected(name);
 
@@ -27,44 +26,6 @@ Rectangle {
             anchors.margins: engine.margin;
             source: engine.resourcesPath + "logo.png";
             fillMode: PreserveAspectFit;
-        }
-
-        Button {
-            id: buttonClose;
-
-            anchors.verticalCenter: parent.verticalCenter;
-            anchors.right: parent.right;
-            anchors.rightMargin: engine.margin;
-            width: height;
-
-            text: "X";
-            borderWidth: 2;
-            color: activeFocus ? engine.colors.background : engine.colors.focusBackground;
-            textColor: activeFocus ? engine.colors.textColor : engine.colors.focusText;
-            borderColor: textColor;
-            radius: 10;
-
-            onSelectPressed: {
-                parent.parent.closed();
-            }
-            onKeyPressed: {        
-                if (key == "Up") {
-                    if(buttonNew.visible)
-                        buttonNew.setFocus();
-                    else {
-                        userList.setFocus();
-                        userList.currentIndex = userList.model.count - 1;
-                    }
-                    return true;
-                }
-                if (key == "Down") {
-                    if(userList.visible)
-                        userList.setFocus();
-                    else
-                        buttonNew.setFocus();
-                    return true;
-                }            
-            }
         }
     }
 
@@ -89,17 +50,10 @@ Rectangle {
         }
 
         onKeyPressed: {        
-            if (key == "Up" && this.currentIndex == 0) {
-                buttonClose.setFocus();
+            if ((key == "Up" && this.currentIndex == 0 || key == "Down" && this.currentIndex == this.model.count - 1) && buttonNew.visible) {
+                buttonNew.setFocus();
                 return true;
-            }    
-            if (key == "Down" && this.currentIndex == this.model.count - 1) {
-                if(buttonNew.visible)
-                    buttonNew.setFocus();
-                else
-                    buttonClose.setFocus();
-                return true;
-            }                
+            }                   
         }
     }
 
@@ -118,17 +72,14 @@ Rectangle {
         borderWidth: 2;
 
         onKeyPressed: {        
-            if (key == "Up") {
-                if(userList.visible) {
-                    userList.setFocus();
-                    userList.currentIndex = userList.model.count - 1;
-                }
-                else
-                    buttonClose.setFocus();
+            if (key == "Up" && userList.visible) {
+                userList.setFocus();
+                userList.currentIndex = userList.model.count - 1;
                 return true;
             }
-            if (key == "Down") {
-                buttonClose.setFocus();
+            if (key == "Down" && userList.visible) {
+                userList.setFocus();
+                userList.currentIndex = 0;
                 return true;
             }
         }

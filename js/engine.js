@@ -23,16 +23,15 @@ this.clearMenu = (menu) => {
     menu.model.reset();
     var count = this.menuItems.length;
     menu.model.append( { title: tr(this.menuItems[0].title), target: tr(this.menuItems[0].target) } );
-    menu.model.append( { title: tr(this.menuItems[count - 2].title), target: tr(this.menuItems[count - 2].target) } );
     menu.model.append( { title: tr(this.menuItems[count - 1].title), target: tr(this.menuItems[count - 1].target) } );
 }
 this.fillMenu = (menu) => {
-    if (menu.model.count <= 3) {
+    if(menu.model.count <= 3) {
         if(menu.model.count == 0)
             this.clearMenu(menu);
         var model = menu.model;
         var position = 1;
-        this.menuItems.slice(1, this.menuItems.length - 2).forEach(function (item) {        
+        this.menuItems.slice(1, this.menuItems.length - 1).forEach(function (item) {        
             model.insert(position++, { title: tr(item.title), target: tr(item.target) } );
         });
     }
@@ -77,6 +76,30 @@ this.loadExerciseList = (list) => {
     this.exerciseItems.forEach(function (item) {
         model.append( { text: tr(item.title)} );
     });    
+}
+
+//notificator
+this.isNeedTraining = () => {
+    return this.dateToString(new Date()) != this.results.lastDate;
+}
+this.showNotify = (type) => {
+    if(type in this.notifications) {
+        if(Array.isArray(this.notifications[type])) {
+            var index = Math.floor(Math.random() * this.notifications[type].length);
+            notificator.text = tr(this.notifications[type][index]);
+        }
+        else
+            notificator.text = tr(this.notifications[type]);
+        notificator.addNotify();
+    }
+}
+
+//keyboard
+this.validateText = (text, validateChars) => {
+    if(validateChars.length === 0)
+        return text;
+    var regex = new RegExp("[^" + validateChars + "]", "gi");
+    return text.replace(regex, "");
 }
 
 //constants
@@ -283,15 +306,19 @@ this.addTraining = () => {
     this.results.trainings++;
     
     this.saveResults(this.results.name);
+
+    this.showNotify("doneTraining");
 };
 
 this.menuItems;
 this.genderItems;
 this.levelItems;
 this.exerciseItems;
+this.notifications;
 this.loadData = (data) => {
     this.menuItems = data["menu"];
     this.genderItems = data["genders"];
     this.levelItems = data["levels"];
     this.exerciseItems = data["exercises"];
+    this.notifications = data["notifications"];
 }
