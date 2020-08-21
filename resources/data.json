@@ -126,12 +126,12 @@
     "videos":
     [
         {
-            "title": "Видео 1",
-            "url": "https://youtu.be/jhuOt_d3ydA"
+            "title": "Тренировка 1",
+            "url": "http://buninforum.elsu.ru/video/training1.mp4"
         },
         {
-            "title": "Видео 2",
-            "url": "http://buninforum.elsu.ru/video/video.mp4"
+            "title": "Тренировка 2",
+            "url": "http://buninforum.elsu.ru/video/training2.mp4"
         }
     ]
 }
