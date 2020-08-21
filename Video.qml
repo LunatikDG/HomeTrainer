@@ -44,8 +44,8 @@ Rectangle {
     onActiveFocusChanged: {
         if(this.activeFocus) {
             htPlayer.visible = true;
-            htPlayer.title = engine.videos[1].title;
-            htPlayer.playVideoById(engine.videos[1].url);
+            htPlayer.title = engine.videos[0].title;
+            htPlayer.playVideoById(engine.videos[0].url);
         }
     }
 }
