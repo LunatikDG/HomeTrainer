@@ -9,6 +9,7 @@ import "Sidebar.qml";
 
 import "Profile.qml";
 import "Training.qml";
+import "Video.qml";
 import "Statistics.qml";
 import "About.qml";
 
@@ -20,11 +21,12 @@ import "controls/Edit.qml";
 import "controls/Button.qml";
 import "controls/Chooser.qml";
 import "controls/ProgressBar.qml";
+import "controls/VideoPlayer.qml";
 
 import "js/engine.js" as engine;
 
 Application {
-    id: hometrainer;
+    id: htApp;
 
     color: engine.colors.background;
 
@@ -114,7 +116,19 @@ Application {
                 }
                 exercise.setExercise(this.exerciseIndex++);
             }
-        }        
+        }   
+        Video { 
+            id: video;
+            anchors.fill: parent;
+            color: parent.color;
+            property var tag: "video";
+            onPlayerStopped: {
+                sidebar.setFocus();
+            }
+            onBackPressed: {
+                sidebar.setFocus();
+            }
+        }     
         Statistics { 
             id: statistics;
             anchors.fill: parent;

@@ -103,7 +103,7 @@ this.validateText = (text, validateChars) => {
 }
 
 //constants
-this.appPath = "apps/hometrainer/";
+this.appPath = "apps/HomeTrainer/";
 this.resourcesPath = this.appPath + "resources/";
 
 this.colors = {
@@ -315,10 +315,12 @@ this.genderItems;
 this.levelItems;
 this.exerciseItems;
 this.notifications;
+this.videos;
 this.loadData = (data) => {
     this.menuItems = data["menu"];
     this.genderItems = data["genders"];
     this.levelItems = data["levels"];
     this.exerciseItems = data["exercises"];
     this.notifications = data["notifications"];
+    this.videos = data["videos"];
 }
