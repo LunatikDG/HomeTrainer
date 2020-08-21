@@ -16,7 +16,6 @@ Rectangle {
         color: engine.colors.headerText;
         text: tr("Видео");
     }
-
     VideoPlayer {
         id: htPlayer;
 
