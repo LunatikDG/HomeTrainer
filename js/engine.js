@@ -78,6 +78,14 @@ this.loadExerciseList = (list) => {
     });    
 }
 
+//video
+this.loadVideoList = (list) => {
+    var model = list.model;
+    this.videoItems.forEach(function (item) {
+        model.append( { text: tr(item.title)} );
+    });
+}
+
 //notificator
 this.isNeedTraining = () => {
     return this.dateToString(new Date()) != this.results.lastDate;
@@ -315,12 +323,12 @@ this.genderItems;
 this.levelItems;
 this.exerciseItems;
 this.notifications;
-this.videos;
+this.videoItems;
 this.loadData = (data) => {
     this.menuItems = data["menu"];
     this.genderItems = data["genders"];
     this.levelItems = data["levels"];
     this.exerciseItems = data["exercises"];
     this.notifications = data["notifications"];
-    this.videos = data["videos"];
+    this.videoItems = data["videos"];
 }

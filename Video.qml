@@ -7,23 +7,67 @@
 
 Rectangle {
 
-    signal playerStopped;
-
-    focus: true;
-
     TitleText {
         id: header;
         color: engine.colors.headerText;
         text: tr("Видео");
     }
-    VideoPlayer {
-        id: htPlayer;
 
+    Chooser {
+        id: videoChooser;     
+        
         anchors.top: header.bottom;
         anchors.topMargin: engine.margin;
         anchors.left: parent.left;
         anchors.right: parent.right;
-        anchors.bottom: parent.bottom;
+        
+        backgroundVisible: false;
+        textColor: engine.colors.textColor;
+        focusTextColor: engine.colors.focusText;
+        highlightColor: activeFocus ? engine.colors.focusBackground : engine.colors.textColor;
+
+        model: ListModel { }
+
+        onKeyPressed: {        
+            if (key == "Up" || key == "Down") {
+                buttonOK.setFocus();
+                return true;
+            }              
+        }
+        onCompleted: {
+            engine.loadVideoList(this);
+        }
+    }
+    Button {
+        id: buttonOK;
+
+        anchors.top: videoChooser.bottom;
+        anchors.right: parent.right;  
+        anchors.topMargin: engine.margin;
+
+        text: tr("Просмотр");
+        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
+        borderColor: textColor;
+        borderWidth: 2;
+
+        onSelectPressed: {
+            htPlayer.visible = true;
+            htPlayer.title = engine.videoItems[videoChooser.currentIndex].title;
+            htPlayer.playVideoById(engine.videoItems[videoChooser.currentIndex].url);
+        }
+        onKeyPressed: {        
+            if (key == "Up" || key == "Down") {
+                videoChooser.setFocus();
+                return true;
+            }                 
+        }
+    }
+
+    VideoPlayer {
+        id: htPlayer;
+
+        anchors.fill: mainWindow;
 
         visible: false;
 
@@ -31,21 +75,20 @@ Rectangle {
             this.abort();
             this.visible = false;
             log("hide");
-            parent.playerStopped();
+            videoChooser.setFocus();
         }
 
         onFinished: {
             this.visible = false;
             log("hide");
-            parent.playerStopped();
+            videoChooser.setFocus();
         }
     }
 
     onActiveFocusChanged: {
         if(this.activeFocus) {
-            htPlayer.visible = true;
-            htPlayer.title = engine.videos[0].title;
-            htPlayer.playVideoById(engine.videos[0].url);
+            videoChooser.currentIndex = 0;
+            videoChooser.setFocus();
         }
     }
 }

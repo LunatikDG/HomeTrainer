@@ -122,9 +122,6 @@ Application {
             anchors.fill: parent;
             color: parent.color;
             property var tag: "video";
-            onPlayerStopped: {
-                sidebar.setFocus();
-            }
             onBackPressed: {
                 sidebar.setFocus();
             }
