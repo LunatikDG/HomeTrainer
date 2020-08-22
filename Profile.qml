@@ -380,16 +380,17 @@ Rectangle {
     }
 
     onActiveFocusChanged: {
-        if(this.activeFocus && !this.isKeyboardClosed) {
-            nameEdit.placeholder = tr("Введите имя");
-            nameEdit.placeholderColor = engine.colors.placeholder;
-            birthdayEdit.placeholder = tr("Введите год рождения");
-            birthdayEdit.placeholderColor = engine.colors.placeholder;
-            heightEdit.placeholder = tr("Укажите рост");
-            heightEdit.placeholderColor = engine.colors.placeholder;
-            weightEdit.placeholder = tr("Укажите вес");
-            weightEdit.placeholderColor = engine.colors.placeholder;
-
+        if(this.activeFocus) {
+            if(!this.isKeyboardClosed) {
+                nameEdit.placeholder = tr("Введите имя");
+                nameEdit.placeholderColor = engine.colors.placeholder;
+                birthdayEdit.placeholder = tr("Введите год рождения");
+                birthdayEdit.placeholderColor = engine.colors.placeholder;
+                heightEdit.placeholder = tr("Укажите рост");
+                heightEdit.placeholderColor = engine.colors.placeholder;
+                weightEdit.placeholder = tr("Укажите вес");
+                weightEdit.placeholderColor = engine.colors.placeholder;
+            }
             nameEdit.setFocus();
         }
     }

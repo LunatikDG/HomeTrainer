@@ -117,15 +117,106 @@ Rectangle {
                 return true;
             }
             if (key == "Down") {
-                buttonStart.setFocus();
+                videoChooser.setFocus();
                 return true;
             }            
+        }
+    }
+
+    BodyText {
+        id: textVideo;
+                        
+        anchors.top: buttonSelect.bottom;
+        anchors.left: parent.left; 
+        anchors.topMargin: engine.margin;
+
+        text: tr("Видеотренировки");
+        color: engine.colors.textColor;
+    }
+    Chooser {
+        id: videoChooser;     
+        
+        anchors.top: textVideo.bottom;
+        anchors.topMargin: engine.margin;
+        anchors.left: parent.left;
+        anchors.right: parent.right;
+        
+        backgroundVisible: false;
+        textColor: engine.colors.textColor;
+        focusTextColor: engine.colors.focusText;
+        highlightColor: activeFocus ? engine.colors.focusBackground : engine.colors.textColor;
+
+        model: ListModel { }
+
+        onKeyPressed: {        
+            if (key == "Up") {
+                buttonSelect.setFocus();
+                return true;
+            }
+            if (key == "Down") {
+                buttonOK.setFocus();
+                return true;
+            }            
+        }
+        onCompleted: {
+            engine.loadVideoList(this);
+        }
+    }
+    Button {
+        id: buttonOK;
+
+        anchors.top: videoChooser.bottom;
+        anchors.right: parent.right;  
+        anchors.topMargin: engine.margin;
+
+        text: tr("Просмотр");
+        color: activeFocus ? engine.colors.focusBackground : engine.colors.background;
+        textColor: activeFocus ? engine.colors.focusText : engine.colors.textColor;
+        borderColor: textColor;
+        borderWidth: 2;
+
+        onSelectPressed: {
+            htPlayer.visible = true;
+            htPlayer.title = engine.videoItems[videoChooser.currentIndex].title;
+            htPlayer.playVideoById(engine.videoItems[videoChooser.currentIndex].url);
+        }
+        onKeyPressed: {        
+            if (key == "Up") {
+                videoChooser.setFocus();
+                return true;
+            }   
+            if (key == "Down") {
+                buttonStart.setFocus();
+                return true;
+            }               
+        }
+    }
+
+    VideoPlayer {
+        id: htPlayer;
+
+        anchors.fill: mainWindow;
+
+        visible: false;
+
+        onBackPressed: {
+            this.abort();
+            this.visible = false;
+            log("hide");
+            buttonStart.setFocus();
+        }
+
+        onFinished: {
+            this.visible = false;
+            log("hide");
+            buttonStart.setFocus();
         }
     }
 
     onActiveFocusChanged: {
         if(this.activeFocus) {
             exerciseChooser.currentIndex = 0;
+            videoChooser.currentIndex = 0;
             buttonStart.setFocus();
         }
     }

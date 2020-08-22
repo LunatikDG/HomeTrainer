@@ -9,7 +9,6 @@ import "Sidebar.qml";
 
 import "Profile.qml";
 import "Training.qml";
-import "Video.qml";
 import "Statistics.qml";
 import "About.qml";
 
@@ -77,6 +76,7 @@ Application {
             onUserDataSaved: {
                 this.update();
                 sidebar.update();
+                sidebar.setFocus();
             }
             onBackPressed: {
                 this.isKeyboardClosed = false;
@@ -116,16 +116,7 @@ Application {
                 }
                 exercise.setExercise(this.exerciseIndex++);
             }
-        }   
-        Video { 
-            id: video;
-            anchors.fill: parent;
-            color: parent.color;
-            property var tag: "video";
-            onBackPressed: {
-                sidebar.setFocus();
-            }
-        }     
+        }      
         Statistics { 
             id: statistics;
             anchors.fill: parent;
